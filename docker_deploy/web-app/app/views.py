@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-# from djoser.views import UserViewSet
+from rest_framework import routers, serializers, viewsets
+from django.contrib.auth.models import User
+from .serializers import DriverSerializer
 
 
 # Create your views here.
@@ -8,7 +10,9 @@ from django.http import HttpResponse
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
-# class AccountViewSet(UserViewSet):
+class DriverViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = DriverSerializer
 
-#     def perform_create(self, serializer):
-#         return
+    def perform_create(self, serializer):
+        return

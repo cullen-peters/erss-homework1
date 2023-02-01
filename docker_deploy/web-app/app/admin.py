@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Driver
+
+
+class DataAdmin(admin.ModelAdmin):
+    list_display = ('user', 'car_type')
+
+
+admin.site.register(Driver, DataAdmin)

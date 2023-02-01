@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'app',
 ]
 
@@ -54,6 +55,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'firsthomework.urls'
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 TEMPLATES = [
     {

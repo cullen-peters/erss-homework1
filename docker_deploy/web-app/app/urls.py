@@ -1,11 +1,11 @@
 from django.conf.urls import include
 from django.urls import path
 from . import views
-# from app.views import AccountViewSet
-# from rest_framework.routers import DefaultRouter
+from .views import DriverViewSet
+from rest_framework.routers import DefaultRouter
 
-# router = DefaultRouter()
-# router.register(r'^users', AccountViewSet)
+router = DefaultRouter()
+router.register(r'^users', DriverViewSet)
 
 # accounts_urlpatterns = [
 #     # url(r'^api/v1/', include('djoser.urls')),
