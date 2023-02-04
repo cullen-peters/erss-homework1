@@ -12,3 +12,13 @@ class DriverSerializer(serializers.ModelSerializer):
             "id",
             
         )
+
+class RideSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ride
+        read_only_fields = (
+            "id",
+        )
+        fields = (
+            "id",
+        )
