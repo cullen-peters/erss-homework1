@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import NewUserForm, NewDriverForm
+from .forms import NewUserForm, NewDriverForm, DeleteDriverForm
 from .models import Driver
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -57,6 +57,15 @@ def create_driver(request):
 		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = NewDriverForm()
 	return render (request=request, template_name="registration/register_driver.html", context={"register_driver_form":form})
+
+def delete_driver(request):
+	if request.method == "POST":
+		print("gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaetting here")
+		driver = Driver.objects.get(user=request.user)
+		driver.delete()
+		return redirect("home")
+	form = DeleteDriverForm()
+	return render (request=request, template_name="registration/unregister_driver.html", context={"delete_driver_form":form})
 
 class DriverViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

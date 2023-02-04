@@ -9,6 +9,7 @@ CAR_TYPES = (
         (2, 'Truck'),
         (3, 'Minivan'),
         (4, 'SUV'),
+        (5, 'Camper'),
     )
 class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="driver")
