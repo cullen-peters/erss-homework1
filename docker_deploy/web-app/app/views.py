@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import NewUserForm, NewDriverForm, RideRequestForm
+from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm
 from .models import Driver, Ride
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -70,6 +70,15 @@ def ride_request(request):
                 messages.error(request, "Unsuccessful ride request. Invalid information.")
         form = RideRequestForm()
         return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
+
+def delete_driver(request):
+	if request.method == "POST":
+		print("gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaetting here")
+		driver = Driver.objects.get(user=request.user)
+		driver.delete()
+		return redirect("home")
+	form = DeleteDriverForm()
+	return render (request=request, template_name="registration/unregister_driver.html", context={"delete_driver_form":form})
 
 class DriverViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

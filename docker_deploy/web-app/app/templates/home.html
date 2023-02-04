@@ -2,7 +2,6 @@
 {% extends 'base.html' %}
 
 
-
 {% block content %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Welcome to a Rideshare App!</a>
@@ -18,6 +17,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'register_driver' %}">Register to be a driver!</a>
         </li>
+        {% if user.driver %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'unregister_driver' %}">Driver Unregistation</a>
+        </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ride_request' %}">Request a ride!</a>
         </li>
@@ -31,4 +35,29 @@
       </ul>
     </div>
   </nav>
+{% endblock %}
+  <body>
+    <div>
+      <h1>Personal Information</h1>
+      <ul>
+        <li>
+          Name: {{ user.get_full_name }}
+        </li>
+        <li>
+          Email: {{ user.email }}
+        </li>
+      </ul>
+      {% if user.driver %}
+        <h1>Driver Information</h1>
+        <ul>
+          <li>
+            Type of car: {{ user.driver.car_type }}
+          </li>
+          <li>
+            Max Number of Passengers: {{ user.driver.max_pass }}
+          </li>
+        </ul>
+      {% endif %}
+    </div>
+  </body>
 {% endblock %}
