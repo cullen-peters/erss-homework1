@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Driver
+from .models import Driver, Ride
 
 
 # Create your forms here.
@@ -38,3 +38,11 @@ class NewDriverForm(forms.ModelForm):
 		if commit:
 			driver.save()
 		return driver
+
+class RideRequestForm(forms.ModelForm):
+        class Meta:
+                model = Ride
+                fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
+
+        def save(self, commit=True):
+                return

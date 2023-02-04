@@ -24,5 +24,6 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("logout", views.logout_request, name="logout"),
     path("register_driver", views.create_driver, name="register_driver"),
+    path("ride_request", views.ride_request, name="ride_request"),
 ]
 

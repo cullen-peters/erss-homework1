@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import NewUserForm, NewDriverForm
-from .models import Driver
+from .forms import NewUserForm, NewDriverForm, RideRequestForm
+from .models import Driver, Ride
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from rest_framework import viewsets
@@ -57,6 +57,19 @@ def create_driver(request):
 		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = NewDriverForm()
 	return render (request=request, template_name="registration/register_driver.html", context={"register_driver_form":form})
+
+def ride_request(request):
+        if request.method == "POST":
+                form = RideRequestForm(request.POST)
+                if form.is_valid():
+                        print("the form is valid")
+                        ride = Ride(owner=request.user, destination=form.cleaned_data.get("destination"), arrival_date=form.cleaned_data.get("arrival_date"), arrival_time=form.cleaned_data.get("arrival_time"), passengers=form.cleaned_data.get("passengers"), car_type=form.cleaned_data.get("car type"), special_info=form.cleaned_data.get("special_info"), shared=form.cleaned_data.get("shared"), confirmed=False, complete=False)
+                        ride.save()
+                        messages.success(request, "Successfully entered ride request.")
+                        return redirect("home")
+                messages.error(request, "Unsuccessful ride request. Invalid information.")
+        form = RideRequestForm()
+        return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
 
 class DriverViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
