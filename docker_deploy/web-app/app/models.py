@@ -14,9 +14,9 @@ class Driver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="driver")
     phone_num = models.CharField(max_length=16, null=False, default="000-000-0000")
     car_type = models.PositiveSmallIntegerField(choices=CAR_TYPES, null=False)
-    license_plate = models.TextField()
+    license_plate = models.CharField(max_length=10)
     max_pass = models.SmallIntegerField()
-    special_info = models.TextField(null=True, blank=True)
+    special_info = models.TextField(max_length=100, null=True, blank=True)
 
 class Ride(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='ride')

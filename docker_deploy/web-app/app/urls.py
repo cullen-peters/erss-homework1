@@ -23,5 +23,6 @@ urlpatterns = [
     path("login", views.login_request, name="login"),
     path("register", views.register, name="register"),
     path("logout", views.logout_request, name="logout"),
+    path("register_driver", views.create_driver, name="register_driver"),
 ]
 
