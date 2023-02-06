@@ -94,6 +94,7 @@
             </ul>
         {%  endfor  %}
     </ul>
+    <p class="text-center">Go <a href="{% url 'home' %}">Back</a> to the home menu.</p>
     {% else %}
             <meta http-equiv="refresh" content="0; {% url 'login' %}" />
     {% endif %}

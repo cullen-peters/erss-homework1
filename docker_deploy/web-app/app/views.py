@@ -10,9 +10,11 @@ from django.http import HttpResponse
 
 def homepage(request):
 	if request.user.is_authenticated:
-		confirmed_rides = Ride.objects.filter(driver=Driver.objects.get(user=request.user), complete=False)
-		context = {'confirmed_rides': confirmed_rides}
-		return render(request, 'home.html', context=context)
+		if Driver.objects.filter(user=request.user).exists():
+			confirmed_rides = Ride.objects.filter(driver=Driver.objects.get(user=request.user), complete=False)
+			context = {'confirmed_rides': confirmed_rides}
+			return render(request, 'home.html', context=context)
+		return render(request, 'home.html')
 	return redirect("login")
 
 def login_request(request):
