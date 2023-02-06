@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Driver, Ride, CAR_TYPES
-
+from tempus_dominus.widgets import DatePicker, TimePicker
 
 # Create your forms here.
 
@@ -79,6 +79,16 @@ class UpdateDriverForm(forms.ModelForm):
 		return driver
 
 class RideRequestForm(forms.ModelForm):
+        destination = forms.CharField(required=True)
+        arrival_date = forms.DateField(widget=forms.DateInput(
+        format=('%Y-%m-%d'),
+        attrs={'class': 'form-control', 
+               'placeholder': 'Select a date',
+               'type': 'date'
+              }))
+        arrival_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+        passengers = forms.IntegerField(required=True, max_value=20, min_value=1)
+        car_type = forms.ChoiceField(choices=CAR_TYPES, required=True)
         class Meta:
                 model = Ride
                 fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
@@ -96,10 +106,9 @@ class RideViewForm(forms.ModelForm):
 	car_type = forms.ChoiceField(choices=CAR_TYPES, disabled=True)
 	special_info = forms.CharField(disabled=True)
 	shared = forms.BooleanField(disabled=True)
-	confirmed = forms.BooleanField(disabled=True) # not needed
 	class Meta:
 			model = Ride
-			fields = ("driver", "owner", "destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared", "confirmed")
+			fields = ("driver", "owner", "destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
 
 	# def to_representation(self, instance):
 	# 	if instance is not None and instance.driver is not None:

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'app',
     'crispy_forms',
+    'tempus_dominus',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'firsthomework.urls'
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://vcm.colab.duke.edu:8000']
 
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"

@@ -4,13 +4,14 @@
 
 {% load crispy_forms_tags %}         
 
+
 <div class="container py-5">
     {% if user.is_authenticated %}
 	<h1>Rides</h1>
 	<form method="POST">
-		{% csrf_token %}
-		{{ ride_request_form|crispy }}                    
-		<button class="btn btn-primary" type="submit">Request a Ride!</button>
+	  {% csrf_token %}
+	  {{ ride_request_form|crispy }}
+	  <button class="btn btn-primary" type="submit">Request a Ride!</button>
 	</form>
 	<p class="text-center">Go <a href="{% url 'home' %}">Back</a> to the home menu.</p>
     {% else %}

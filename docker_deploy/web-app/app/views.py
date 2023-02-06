@@ -109,11 +109,10 @@ def update_driver(request):
 
 def ride_request(request):
 	if request.method == "POST":
-		print(request.body)
 		form = RideRequestForm(request.POST)
 		if form.is_valid():
 				print("the form is valid")
-				ride = Ride(owner=request.user, destination=form.cleaned_data.get("destination"), arrival_date=form.cleaned_data.get("arrival_date"), arrival_time=form.cleaned_data.get("arrival_time"), passengers=form.cleaned_data.get("passengers"), car_type=form.cleaned_data.get("car type"), special_info=form.cleaned_data.get("special_info"), shared=form.cleaned_data.get("shared"), confirmed=False, complete=False)
+				ride = Ride(owner=request.user, destination=form.cleaned_data.get("destination"), arrival_date=form.cleaned_data.get("arrival_date"), arrival_time=form.cleaned_data.get("arrival_time"), passengers=form.cleaned_data.get("passengers"), car_type=form.cleaned_data.get("car type"), special_info=form.cleaned_data.get("special_info"), shared=form.cleaned_data.get("shared"), complete=False)
 				ride.save()
 				messages.success(request, "Successfully entered ride request.")
 				return redirect("home")
@@ -144,9 +143,3 @@ def view_ride_list(request):
 		return render(request, 'rides.html', context=context)
 	return redirect("login")
 
-# class RideViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = RideSerializer
-
-#     def perform_create(self, serializer):
-#         return
