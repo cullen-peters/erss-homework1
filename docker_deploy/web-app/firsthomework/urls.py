@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
 from django.views.generic.base import TemplateView
+from app.views import homepage
 
 app_name = "app"
 
@@ -24,5 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('app/', include('app.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path("", homepage, name="home"),
+    # path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]

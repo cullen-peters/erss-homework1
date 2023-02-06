@@ -19,7 +19,18 @@ class Driver(models.Model):
     max_pass = models.SmallIntegerField()
     special_info = models.TextField(max_length=100, null=True, blank=True)
 
+    def __str__(self):
+        return self.user.get_full_name
+
+class UserData(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="userdata")
+    # rides = models.ManyToManyField(Ride, null=True, blank=True)
+
+    def __str__(self):
+        return self.user.get_full_name
+
 class Ride(models.Model):
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='driver', default=None)
     owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='ride')
     destination = models.TextField()
     arrival_date = models.DateField()
@@ -28,11 +39,8 @@ class Ride(models.Model):
     car_type = models.PositiveSmallIntegerField(choices=CAR_TYPES, null=True, blank=True)
     special_info = models.TextField(null=True, blank=True)
     shared = models.BooleanField(default=False)
-    confirmed = models.BooleanField()
     complete = models.BooleanField()
-
-class UserData(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="userdata")
+    sharers = models.ManyToManyField(UserData, blank=True)
 
 
 @receiver(post_save, sender=User)

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Driver, Ride
+from .models import Driver, Ride, CAR_TYPES
 
 
 # Create your forms here.
@@ -85,6 +85,31 @@ class RideRequestForm(forms.ModelForm):
 
         def save(self, commit=True):
                 return
+
+class RideViewForm(forms.ModelForm):
+	driver = forms.CharField(disabled=True)
+	owner = forms.CharField(disabled=True)
+	destination = forms.CharField(disabled=True)
+	arrival_date = forms.DateField(disabled=True)
+	arrival_time = forms.TimeField(disabled=True)
+	passengers = forms.IntegerField(disabled=True, max_value=20, min_value=1)
+	car_type = forms.ChoiceField(choices=CAR_TYPES, disabled=True)
+	special_info = forms.CharField(disabled=True)
+	shared = forms.BooleanField(disabled=True)
+	confirmed = forms.BooleanField(disabled=True) # not needed
+	class Meta:
+			model = Ride
+			fields = ("driver", "owner", "destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared", "confirmed")
+
+	# def to_representation(self, instance):
+	# 	if instance is not None and instance.driver is not None:
+	# 		instance['driver'] = instance.driver.user.get_full_name
+	# 	if instance is not None and instance.owner is not None:
+	# 		instance['owner'] = instance.owner.get_full_name
+	# 	return instance
+
+	def save(self, commit=True):
+		return
 
 class DeleteDriverForm(forms.Form):
 	class Meta:

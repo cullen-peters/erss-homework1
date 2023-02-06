@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect
-from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm
+from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm
 from .models import Driver, Ride
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from rest_framework import viewsets
 from django.contrib.auth.models import User
-from .serializers import DriverSerializer, RideSerializer
 from django.contrib.auth.forms import AuthenticationForm
 
+
+def homepage(request):
+	confirmed_rides = Ride.objects.filter(driver=Driver.objects.get(user=request.user), complete=False)
+	context = {'confirmed_rides': confirmed_rides}
+	return render(request, 'home.html', context=context)
 
 def login_request(request):
 	if request.method == "POST":
@@ -96,17 +99,37 @@ def update_driver(request):
 # RIDES
 
 def ride_request(request):
-        if request.method == "POST":
-                form = RideRequestForm(request.POST)
-                if form.is_valid():
-                        print("the form is valid")
-                        ride = Ride(owner=request.user, destination=form.cleaned_data.get("destination"), arrival_date=form.cleaned_data.get("arrival_date"), arrival_time=form.cleaned_data.get("arrival_time"), passengers=form.cleaned_data.get("passengers"), car_type=form.cleaned_data.get("car type"), special_info=form.cleaned_data.get("special_info"), shared=form.cleaned_data.get("shared"), confirmed=False, complete=False)
-                        ride.save()
-                        messages.success(request, "Successfully entered ride request.")
-                        return redirect("home")
-                messages.error(request, "Unsuccessful ride request. Invalid information.")
-        form = RideRequestForm()
-        return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
+	if request.method == "POST":
+		print(request.body)
+		form = RideRequestForm(request.POST)
+		if form.is_valid():
+				print("the form is valid")
+				ride = Ride(owner=request.user, destination=form.cleaned_data.get("destination"), arrival_date=form.cleaned_data.get("arrival_date"), arrival_time=form.cleaned_data.get("arrival_time"), passengers=form.cleaned_data.get("passengers"), car_type=form.cleaned_data.get("car type"), special_info=form.cleaned_data.get("special_info"), shared=form.cleaned_data.get("shared"), confirmed=False, complete=False)
+				ride.save()
+				messages.success(request, "Successfully entered ride request.")
+				return redirect("home")
+		messages.error(request, "Unsuccessful ride request. Invalid information.")
+	form = RideRequestForm()
+	return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
+
+def view_ride(request):
+	if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
+		ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
+		ride.complete = True
+		ride.save()
+		messages.success(request, "Successfully entered ride request.")
+		return redirect("home")
+	# form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None))).to_representation(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
+	form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
+	return render (request=request, template_name="ride_view.html", context={"ride_view_form":form})
+
+def view_ride_list(request):
+	owned_rides = Ride.objects.filter(owner=request.user)
+	shared_rides = Ride.objects.filter()
+	context = {
+		'owned_rides': owned_rides,
+		}
+	return render(request, 'rides.html', context=context)
 
 # class RideViewSet(viewsets.ModelViewSet):
 #     queryset = User.objects.all()

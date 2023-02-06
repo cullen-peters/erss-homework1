@@ -22,6 +22,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ride_request' %}">Request a ride!</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ride_request' %}">Your Rides</a>
+        </li>
         {% if user.driver %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'unregister_driver' %}">Driver Unregistation</a>
@@ -80,10 +83,22 @@
           <li>
             Max Number of Passengers: {{ user.driver.max_pass }}
           </li>
+          {% if user.driver.special_info %}
           <li>
             Vehicle Special Information: {{ user.driver.special_info }}
           </li>
+          {% endif %}
         </ul>
+      {% endif %}
+    </div>
+    <div>
+      {% if user.driver %}
+      <h1>Confirmed Rides</h1>
+      <ul>
+        {%  for object in confirmed_rides  %}
+          <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a><b> Owner: {{object.owner}}; Ride Destination: {{object.destination}}; Ride Arrival Date: {{object.arrival_date}}; Ride Arrival Time: {{object.arrival_time}}; # Passengers: {{object.passengers}}  </b></li>
+        {%  endfor  %}
+      </ul>
       {% endif %}
     </div>
   </body>

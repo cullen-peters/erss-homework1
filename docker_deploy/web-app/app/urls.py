@@ -18,7 +18,6 @@ from rest_framework.routers import DefaultRouter
 
 
 urlpatterns = [
-    # path("", views.homepage, name="homepage"),
     path("login", views.login_request, name="login"),
     path("register", views.register, name="register"),
     path("logout", views.logout_request, name="logout"),
@@ -26,6 +25,8 @@ urlpatterns = [
     path("ride_request", views.ride_request, name="ride_request"),
     path("unregister_driver", views.delete_driver, name="unregister_driver"),
     path("update_user", views.update_user, name="update_user"),
-    path("update_driver", views.update_driver, name="update_driver")
+    path("update_driver", views.update_driver, name="update_driver"),
+    path("ride", views.view_ride, name="ride"),
+    path("rides", views.view_ride_list, name='ride_list'),
 ]
 
