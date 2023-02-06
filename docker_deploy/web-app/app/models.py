@@ -30,7 +30,7 @@ class UserData(models.Model):
         return self.user.get_full_name()
 
 class Ride(models.Model):
-    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='driver', default=None)
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='driver', null=True, blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ride')
     destination = models.TextField()
     arrival_date = models.DateField()
