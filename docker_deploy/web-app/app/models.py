@@ -20,18 +20,18 @@ class Driver(models.Model):
     special_info = models.TextField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return self.user.get_full_name
+        return self.user.get_full_name()
 
 class UserData(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="userdata")
     # rides = models.ManyToManyField(Ride, null=True, blank=True)
 
     def __str__(self):
-        return self.user.get_full_name
+        return self.user.get_full_name()
 
 class Ride(models.Model):
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='driver', default=None)
-    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='ride')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ride')
     destination = models.TextField()
     arrival_date = models.DateField()
     arrival_time = models.TimeField()
