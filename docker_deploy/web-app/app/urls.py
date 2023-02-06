@@ -1,7 +1,6 @@
 from django.conf.urls import include
 from django.urls import path
 from . import views
-from .views import DriverViewSet, RideViewSet
 from rest_framework.routers import DefaultRouter
 
 #router = DefaultRouter()
@@ -26,5 +25,7 @@ urlpatterns = [
     path("register_driver", views.create_driver, name="register_driver"),
     path("ride_request", views.ride_request, name="ride_request"),
     path("unregister_driver", views.delete_driver, name="unregister_driver"),
+    path("update_user", views.update_user, name="update_user"),
+    path("update_driver", views.update_driver, name="update_driver")
 ]
 

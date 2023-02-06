@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %} 
+
+{% load crispy_forms_tags %}         
+
+<div class="container py-5">
+	<h1>Update User Information</h1>
+	<form method="POST">
+		{% csrf_token %}
+		{{ update_user_form|crispy }}                    
+		<button class="btn btn-primary" type="submit">Update!</button>
+	</form>
+	<p class="text-center">Go <a href="{% url 'home' %}">Back</a> to the home menu.</p>
+</div>
+
+{% endblock %}

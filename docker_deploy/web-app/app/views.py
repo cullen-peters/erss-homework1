@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm
+from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm
 from .models import Driver, Ride
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -7,7 +7,6 @@ from rest_framework import viewsets
 from django.contrib.auth.models import User
 from .serializers import DriverSerializer, RideSerializer
 from django.contrib.auth.forms import AuthenticationForm
-
 
 
 def login_request(request):
@@ -33,6 +32,10 @@ def logout_request(request):
     messages.info(request, "Logged out successfully!")
     return redirect("/")
 
+# LOGIN^
+# -----------------------------------------------------------------------------------------------------
+# USER STUFF
+
 def register(request):
 	if request.method == "POST":
 		form = NewUserForm(request.POST)
@@ -44,6 +47,19 @@ def register(request):
 		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = NewUserForm()
 	return render (request=request, template_name="registration/register.html", context={"register_form":form})
+
+def update_user(request):
+	if request.method == "POST":
+		form = UpdateUserForm(request.POST, instance=request.user)
+		if form.is_valid():
+			form.save()
+			return redirect("home")
+	form = UpdateUserForm(instance=request.user)
+	return render(request=request, template_name="registration/update_user.html", context={"update_user_form":form})
+
+# USER STUFF^
+#------------------------------------------------------
+# DRIVER
 
 def create_driver(request):
 	if request.method == "POST":
@@ -58,6 +74,27 @@ def create_driver(request):
 	form = NewDriverForm()
 	return render (request=request, template_name="registration/register_driver.html", context={"register_driver_form":form})
 
+def delete_driver(request):
+	if request.method == "POST":
+		driver = Driver.objects.get(user=request.user)
+		driver.delete()
+		return redirect("home")
+	form = DeleteDriverForm()
+	return render (request=request, template_name="registration/unregister_driver.html", context={"delete_driver_form":form})
+
+def update_driver(request):
+	if request.method == "POST":
+		form = UpdateDriverForm(request.POST, instance=Driver.objects.get(user=request.user))
+		if form.is_valid():
+			form.save()
+			return redirect("home")
+	form = UpdateDriverForm(instance=Driver.objects.get(user=request.user))
+	return render(request=request, template_name="registration/update_driver.html", context={"update_driver_form":form})
+
+# DRIVER^
+# -------------------------------------------------
+# RIDES
+
 def ride_request(request):
         if request.method == "POST":
                 form = RideRequestForm(request.POST)
@@ -71,25 +108,9 @@ def ride_request(request):
         form = RideRequestForm()
         return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
 
-def delete_driver(request):
-	if request.method == "POST":
-		print("gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaetting here")
-		driver = Driver.objects.get(user=request.user)
-		driver.delete()
-		return redirect("home")
-	form = DeleteDriverForm()
-	return render (request=request, template_name="registration/unregister_driver.html", context={"delete_driver_form":form})
+# class RideViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = RideSerializer
 
-class DriverViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = DriverSerializer
-
-    def perform_create(self, serializer):
-        return
-
-class RideViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = RideSerializer
-
-    def perform_create(self, serializer):
-        return
+#     def perform_create(self, serializer):
+#         return

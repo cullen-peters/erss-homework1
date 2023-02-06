@@ -12,7 +12,7 @@
 		{{ register_driver_form|crispy }}                    
 		<button class="btn btn-primary" type="submit">Register as a Driver!</button>
 	</form>
-	<p class="text-center"><a href="{% url 'home' %}">Back</a></p>
+	<p class="text-center">Go <a href="{% url 'home' %}">Back</a> to the home menu.</p>
     {% else %}
         <meta http-equiv="refresh" content="0; {% url 'login' %}" />
     {% endif %}

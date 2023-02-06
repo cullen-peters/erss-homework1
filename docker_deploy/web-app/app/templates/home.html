@@ -14,17 +14,19 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Welcome, {{user.username}}</a>
         </li>
+        {% if not user.driver %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'register_driver' %}">Register to be a driver!</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ride_request' %}">Request a ride!</a>
         </li>
         {% if user.driver %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'unregister_driver' %}">Driver Unregistation</a>
         </li>
         {% endif %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'ride_request' %}">Request a ride!</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>
@@ -35,10 +37,12 @@
       </ul>
     </div>
   </nav>
-{% endblock %}
   <body>
     <div>
       <h1>Personal Information</h1>
+      <a class="subtitle" href="{% url 'update_user' %}">
+        <h5>Edit Personal info</h5>
+      </a>
       <ul>
         <li>
           Name: {{ user.get_full_name }}
@@ -48,13 +52,36 @@
         </li>
       </ul>
       {% if user.driver %}
-        <h1>Driver Information</h1>
+      <h1>Driver Information</h1>
+      <a class="subtitle" href="{% url 'update_driver' %}">
+        <h5>Edit driver info</h5>
+      </a>
         <ul>
           <li>
-            Type of car: {{ user.driver.car_type }}
+            {% if user.driver.car_type == 1 %}
+              Type of car: Sudan
+            {% endif %}
+            {% if user.driver.car_type == 2 %}
+              Type of car: Truck
+            {% endif %}
+            {% if user.driver.car_type == 3 %}
+              Type of car: Minivan
+            {% endif %}
+            {% if user.driver.car_type == 4 %}
+              Type of car: SUV
+            {% endif %}
+            {% if user.driver.car_type == 5 %}
+              Type of car: Camper
+            {% endif %}
+          </li>
+          <li>
+            License Plate: {{ user.driver.license_plate }}
           </li>
           <li>
             Max Number of Passengers: {{ user.driver.max_pass }}
+          </li>
+          <li>
+            Vehicle Special Information: {{ user.driver.special_info }}
           </li>
         </ul>
       {% endif %}
