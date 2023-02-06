@@ -2,15 +2,97 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-    <h1>Local Library Home</h1>
-    <p>Welcome to LocalLibrary, a website developed by <em>Mozilla Developer Network</em>!</p>
-    <h2>Dynamic content</h2>
-    <p>The library has the following record counts:</p>
+    <h1>Your Open Rides</h1>
     <ul>
-        <li><strong>Books:</strong> {{ num_books }}</li>
-        <li><strong>Copies:</strong> {{ num_instances }}</li>
-        <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
-        <li><strong>Authors:</strong> {{ num_authors }}</li>
+        {%  for object in owned_rides  %}
+            <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
+                <ul>
+                <li>
+                {% if object.driver %}Driver: {{object.driver}}
+                    <ul>
+                        <li>
+                            {% if object.driver.car_type == 1 %}
+                              Type of car: Sudan
+                            {% endif %}
+                            {% if object.driver.car_type == 2 %}
+                              Type of car: Truck
+                            {% endif %}
+                            {% if object.driver.car_type == 3 %}
+                              Type of car: Minivan
+                            {% endif %}
+                            {% if object.driver.car_type == 4 %}
+                              Type of car: SUV
+                            {% endif %}
+                            {% if object.driver.car_type == 5 %}
+                              Type of car: Camper
+                            {% endif %}
+                        </li>
+                        <li>
+                            License Plate: {{object.driver.license_plate}}
+                        </li>
+                        <li>
+                            Max Number of Passengers: {{object.driver.max_pass}}
+                        </li>
+                        {% if user.driver.special_info %}
+                            <li>
+                                Vehicle Special Information: {{ object.driver.special_info }}
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+                </li>
+                <li>Ride Destination: {{object.destination}}</li>
+                <li>Ride Arrival Date: {{object.arrival_date}}</li>
+                <li>Ride Arrival Time: {{object.arrival_time}}</li>
+                <li>Your Number of Passengers: {{object.passengers}}</li>
+            </ul>
+        {%  endfor  %}
+    </ul>
+    <h1>Your Joined Rides</h1>
+    <ul>
+        {%  for object in owned_rides  %}
+            <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
+            <ul>
+            <li>
+                {% if object.driver %}Driver: {{object.driver}}
+                    <ul>
+                        <li>
+                            {% if object.driver.car_type == 1 %}
+                              Type of car: Sudan
+                            {% endif %}
+                            {% if object.driver.car_type == 2 %}
+                              Type of car: Truck
+                            {% endif %}
+                            {% if object.driver.car_type == 3 %}
+                              Type of car: Minivan
+                            {% endif %}
+                            {% if object.driver.car_type == 4 %}
+                              Type of car: SUV
+                            {% endif %}
+                            {% if object.driver.car_type == 5 %}
+                              Type of car: Camper
+                            {% endif %}
+                        </li>
+                        <li>
+                            License Plate: {{object.driver.license_plate}}
+                        </li>
+                        <li>
+                            Max Number of Passengers: {{object.driver.max_pass}}
+                        </li>
+                        {% if user.driver.special_info %}
+                            <li>
+                                Vehicle Special Information: {{ object.driver.special_info }}
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+                </li>
+                <li>Ride Destination: {{object.destination}}</li>
+                <li>Ride Arrival Date: {{object.arrival_date}}</li>
+                <li>Ride Arrival Time: {{object.arrival_time}}</li>
+                <li>Your Number of Passengers: {{object.passengers}}</li>
+            </ul>
+        {%  endfor  %}
     </ul>
     {% else %}
             <meta http-equiv="refresh" content="0; {% url 'login' %}" />

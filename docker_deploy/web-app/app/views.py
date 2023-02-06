@@ -5,12 +5,15 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponse
 
 
 def homepage(request):
-	confirmed_rides = Ride.objects.filter(driver=Driver.objects.get(user=request.user), complete=False)
-	context = {'confirmed_rides': confirmed_rides}
-	return render(request, 'home.html', context=context)
+	if request.user.is_authenticated:
+		confirmed_rides = Ride.objects.filter(driver=Driver.objects.get(user=request.user), complete=False)
+		context = {'confirmed_rides': confirmed_rides}
+		return render(request, 'home.html', context=context)
+	return redirect("login")
 
 def login_request(request):
 	if request.method == "POST":
@@ -33,7 +36,7 @@ def login_request(request):
 def logout_request(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
-    return redirect("/")
+    return redirect("/app/login")
 
 # LOGIN^
 # -----------------------------------------------------------------------------------------------------
@@ -52,13 +55,15 @@ def register(request):
 	return render (request=request, template_name="registration/register.html", context={"register_form":form})
 
 def update_user(request):
-	if request.method == "POST":
-		form = UpdateUserForm(request.POST, instance=request.user)
-		if form.is_valid():
-			form.save()
-			return redirect("home")
-	form = UpdateUserForm(instance=request.user)
-	return render(request=request, template_name="registration/update_user.html", context={"update_user_form":form})
+	if request.user.is_authenticated:
+		if request.method == "POST":
+			form = UpdateUserForm(request.POST, instance=request.user)
+			if form.is_valid():
+				form.save()
+				return redirect("home")
+		form = UpdateUserForm(instance=request.user)
+		return render(request=request, template_name="registration/update_user.html", context={"update_user_form":form})
+	return redirect("login")
 
 # USER STUFF^
 #------------------------------------------------------
@@ -86,13 +91,15 @@ def delete_driver(request):
 	return render (request=request, template_name="registration/unregister_driver.html", context={"delete_driver_form":form})
 
 def update_driver(request):
-	if request.method == "POST":
-		form = UpdateDriverForm(request.POST, instance=Driver.objects.get(user=request.user))
-		if form.is_valid():
-			form.save()
-			return redirect("home")
-	form = UpdateDriverForm(instance=Driver.objects.get(user=request.user))
-	return render(request=request, template_name="registration/update_driver.html", context={"update_driver_form":form})
+	if request.user.is_authenticated:
+		if request.method == "POST":
+			form = UpdateDriverForm(request.POST, instance=Driver.objects.get(user=request.user))
+			if form.is_valid():
+				form.save()
+				return redirect("home")
+		form = UpdateDriverForm(instance=Driver.objects.get(user=request.user))
+		return render(request=request, template_name="registration/update_driver.html", context={"update_driver_form":form})
+	return redirect("login")
 
 # DRIVER^
 # -------------------------------------------------
@@ -113,23 +120,27 @@ def ride_request(request):
 	return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
 
 def view_ride(request):
-	if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
-		ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
-		ride.complete = True
-		ride.save()
-		messages.success(request, "Successfully entered ride request.")
-		return redirect("home")
-	# form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None))).to_representation(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
-	form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
-	return render (request=request, template_name="ride_view.html", context={"ride_view_form":form})
+	if request.user.is_authenticated:
+		if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
+			ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
+			ride.complete = True
+			ride.save()
+			messages.success(request, "Successfully entered ride request.")
+			return redirect("home")
+		# form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None))).to_representation(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
+		form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
+		return render (request=request, template_name="ride_view.html", context={"ride_view_form":form})
+	return redirect("login")
 
 def view_ride_list(request):
-	owned_rides = Ride.objects.filter(owner=request.user)
-	shared_rides = Ride.objects.filter()
-	context = {
-		'owned_rides': owned_rides,
-		}
-	return render(request, 'rides.html', context=context)
+	if request.user.is_authenticated:
+		owned_rides = Ride.objects.filter(owner=request.user, complete=False)
+		shared_rides = Ride.objects.filter()
+		context = {
+			'owned_rides': owned_rides,
+			}
+		return render(request, 'rides.html', context=context)
+	return redirect("login")
 
 # class RideViewSet(viewsets.ModelViewSet):
 #     queryset = User.objects.all()
