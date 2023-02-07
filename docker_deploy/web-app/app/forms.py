@@ -143,3 +143,19 @@ class DeleteDriverForm(forms.Form):
 		model = Driver
 		fields = ("phone_num", "car_type", "license_plate", "max_pass", "special_info")
 
+class DriverSearchForm(forms.Form):
+        min_date = forms.DateField(widget=forms.DateInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select a date',
+                       'type': 'date',
+                       }), required=False)
+        min_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}),required=False)
+        max_date = forms.DateField(widget=forms.DateInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select a date',
+                       'type': 'date',
+                       }), required=False)
+        max_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=False)
+        

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm, EditRideForm
+from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm, EditRideForm, DriverSearchForm
 from .models import Driver, Ride, CAR_TYPES
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -154,4 +154,24 @@ def edit_ride(request):
                                 return redirect("ride_list")
                 form = EditRideForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
                 return render(request=request, template_name="edit_ride.html", context={"edit_ride_form":form})
+        return redirect("login")
+
+# RIDES ^
+# ---------------------------
+# SEARCH
+
+def driver_search(request):
+        if request.user.is_authenticated:
+                open_rides = Ride.objects.filter(driver=None, complete=False)
+                if request.method == "POST":
+                        form = DriverSearchForm(request.POST)
+                        if form.is_valid():
+                                open_rides = Ride.objects.filter(driver=None, complete=False)
+                else:
+                        form = DriverSearchForm()
+                context = {
+                        'driver_search_form': form,
+                        'open_rides': open_rides,
+                }
+                return render(request=request, template_name="driver_search.html", context=context)
         return redirect("login")
