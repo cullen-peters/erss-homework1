@@ -183,15 +183,6 @@ def confirm_ride(request):
 			recipient_list = send_list
 			send_mail(subject, message, email_from, recipient_list)
 
-			# message = EmailMessage(
-			# 	to: [ride.owner.email,],
-            #     subject='Ride Share App Ride Confirmed',
-            #     body=f'Hi! Your ride to {ride.destination} has been confirmed by driver {ride.driver}.',
-            #     from_email=settings.EMAIL_HOST_USER,
-            #     cc=cc_list,
-            # )
-			# message.send(fail_silently=False)
-
 			messages.success(request, "Successfully confirmed ride request.")
 			return redirect("home")
 		form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)), initial={'driver': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).driver.__str__, 'owner': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).owner.__str__})
