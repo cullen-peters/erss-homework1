@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
 
 
 CAR_TYPES = (
@@ -23,16 +23,10 @@ class Driver(models.Model):
     def __str__(self):
         return self.user.get_full_name()
 
-class UserData(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="userdata")
-    # rides = models.ManyToManyField(Ride, null=True, blank=True)
-
-    def __str__(self):
-        return self.user.get_full_name()
-
 class Ride(models.Model):
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name='driver', null=True, blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ride')
+    sharers = models.ManyToManyField(User, blank=True, related_name="sharers")
     destination = models.TextField()
     arrival_date = models.DateField()
     arrival_time = models.TimeField()
@@ -41,17 +35,3 @@ class Ride(models.Model):
     special_info = models.TextField(null=True, blank=True)
     shared = models.BooleanField(default=False)
     complete = models.BooleanField()
-    sharers = models.ManyToManyField(UserData, blank=True)
-
-
-@receiver(post_save, sender=User)
-def create_userdata(sender, instance, created, **kwargs):
-    if created:
-        UserData.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_profile(sender, instance, **kwargs):
-    instance.userdata.save()
-
-
-
