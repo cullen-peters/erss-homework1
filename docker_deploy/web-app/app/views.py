@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm
+from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm, EditRideForm
 from .models import Driver, Ride, CAR_TYPES
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -35,9 +35,9 @@ def login_request(request):
 	return render(request=request, template_name="registration/login.html", context={"login_form":form})
 
 def logout_request(request):
-    logout(request)
-    messages.info(request, "Logged out successfully!")
-    return redirect("/app/login")
+        logout(request)
+        messages.info(request, "Logged out successfully!")
+        return redirect("/app/login")
 
 # LOGIN^
 # -----------------------------------------------------------------------------------------------------
@@ -133,12 +133,25 @@ def view_ride(request):
 	return redirect("login")
 
 def view_ride_list(request):
-	if request.user.is_authenticated:
-		owned_rides = Ride.objects.filter(owner=request.user, complete=False)
-		shared_rides = Ride.objects.filter()
-		context = {
-			'owned_rides': owned_rides,
-			}
-		return render(request, 'rides.html', context=context)
-	return redirect("login")
+        if request.user.is_authenticated:
+                owned_rides = Ride.objects.filter(owner=request.user, driver=None, complete=False)
+                shared_rides = Ride.objects.filter()
+                confirmed_rides = Ride.objects.filter()
+                context = {
+                        'owned_rides': owned_rides,
+                        'shared_rides': shared_rides,
+                        'confirmed_rides': confirmed_rides,
+                }
+                return render(request, 'rides.html', context=context)
+        return redirect("login")
 
+def edit_ride(request):
+        if request.user.is_authenticated:
+                if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
+                        form = EditRideForm(request.POST, instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
+                        if form.is_valid():
+                                form.save()
+                                return redirect("ride_list")
+                form = EditRideForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
+                return render(request=request, template_name="edit_ride.html", context={"edit_ride_form":form})
+        return redirect("login")

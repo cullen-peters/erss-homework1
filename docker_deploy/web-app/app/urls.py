@@ -28,5 +28,6 @@ urlpatterns = [
     path("update_driver", views.update_driver, name="update_driver"),
     path("ride", views.view_ride, name="ride"),
     path("rides", views.view_ride_list, name='ride_list'),
+    path("edit_ride", views.edit_ride, name='edit_ride'),
 ]
 

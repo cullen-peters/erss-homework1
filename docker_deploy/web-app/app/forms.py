@@ -88,11 +88,12 @@ class RideRequestForm(forms.ModelForm):
               }))
         arrival_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
         passengers = forms.IntegerField(required=True, max_value=20, min_value=1)
-        car_type = forms.ChoiceField(choices=CAR_TYPES, required=True)
+        car_type = forms.ChoiceField(choices=CAR_TYPES, required=False)
+        special_info = forms.CharField(required=False)
+        shared = forms.BooleanField(required=False)
         class Meta:
                 model = Ride
                 fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
-
         def save(self, commit=True):
                 return
 
@@ -113,6 +114,30 @@ class RideViewForm(forms.ModelForm):
 	def save(self, commit=True):
 		return
 
+class EditRideForm(forms.ModelForm):
+        destination = forms.CharField(required=True)
+        arrival_date = forms.DateField(widget=forms.DateInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select a date',
+                       'type': 'date'
+                       }))
+        arrival_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+        passengers = forms.IntegerField(required=True, max_value=20, min_value=1)
+        car_type = forms.ChoiceField(choices=CAR_TYPES, required=False)
+        special_info = forms.CharField(required=False)
+        shared = forms.BooleanField(required=False)
+        class Meta:
+                model = Ride
+                fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
+
+        def save(self, commit=True):
+                ride = super(EditRideForm, self).save(commit=False)
+                if commit:
+                        ride.save()
+                return ride
+                
+        
 class DeleteDriverForm(forms.Form):
 	class Meta:
 		model = Driver
