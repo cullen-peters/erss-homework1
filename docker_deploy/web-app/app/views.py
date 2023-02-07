@@ -169,7 +169,7 @@ def edit_ride(request):
 
 def driver_search(request):
         if request.user.is_authenticated:
-                open_rides = Ride.objects.filter(driver=None, complete=False)
+                open_rides = Ride.objects.filter(driver=None, complete=False).exclude(owner=request.user)
                 if request.method == "POST":
                         form = DriverSearchForm(request.POST)
                         if form.is_valid():

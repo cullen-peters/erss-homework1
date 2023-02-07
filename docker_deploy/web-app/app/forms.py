@@ -158,4 +158,3 @@ class DriverSearchForm(forms.Form):
                        'type': 'date',
                        }), required=False)
         max_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=False)
-        
