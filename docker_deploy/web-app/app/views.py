@@ -194,11 +194,16 @@ def driver_search(request):
                                 max_time = form.cleaned_data.get("max_time")
                                 dest = form.cleaned_data.get("destination")
                                 if min_date:
+                                        print(min_date)
+                                        print(type(min_date))
                                         open_rides = open_rides.filter(arrival_date__gte=min_date)
                                 if min_time:
+                                        print(min_time)
                                         open_rides = open_rides.filter(arrival_time__gte=min_time)
                                 if max_date:
-                                        open_rides = open_rides.filter(arrival_time__lte=max_date)
+                                        print(max_date)
+                                        print(type(max_date))
+                                        open_rides = open_rides.filter(arrival_date__lte=max_date)
                                 if max_time:
                                         open_rides = open_rides.filter(arrival_time__lte=max_time)
                                 if dest:

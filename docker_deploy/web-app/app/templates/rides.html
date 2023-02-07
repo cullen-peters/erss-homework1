@@ -11,7 +11,7 @@
           {% if object.driver %}Driver: {{object.driver}}
           <ul>
             <li>
-              {% if object.driver.car_type == 1 %}Type of car: Sudan{% endif %}
+              {% if object.driver.car_type == 1 %}Type of car: Sedan{% endif %}
               {% if object.driver.car_type == 2 %}Type of car: Truck{% endif %}
               {% if object.driver.car_type == 3 %}Type of car: Minivan{% endif %}
               {% if object.driver.car_type == 4 %}Type of car: SUV{% endif %}
@@ -49,7 +49,7 @@
                     <ul>
                         <li>
                             {% if object.driver.car_type == 1 %}
-                              Type of car: Sudan
+                              Type of car: Sedan
                             {% endif %}
                             {% if object.driver.car_type == 2 %}
                               Type of car: Truck
@@ -88,7 +88,7 @@
     <h1>Your Joined Rides</h1>
     <ul>
         {%  for object in shared_rides  %}
-            <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
+        <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
             <li><a href="{% url 'ride' %}?{{object.pk}}">LEAVE RIDE</a></li>
             <ul>
             <li>
@@ -96,7 +96,7 @@
                     <ul>
                         <li>
                             {% if object.driver.car_type == 1 %}
-                              Type of car: Sudan
+                              Type of car: Sedan
                             {% endif %}
                             {% if object.driver.car_type == 2 %}
                               Type of car: Truck
