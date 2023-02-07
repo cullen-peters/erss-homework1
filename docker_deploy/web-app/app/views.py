@@ -5,6 +5,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
+from django.conf import settings
+from django.core.mail import send_mail, EmailMessage, EmailMultiAlternatives
 
 
 def homepage(request):
@@ -169,6 +171,27 @@ def confirm_ride(request):
 			ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
 			ride.driver = request.user.driver
 			ride.save()
+			send_list = []
+			send_list.append(ride.owner.email)
+			if ride.sharers.exists():
+				for obj in ride.sharers.all():
+					send_list.append(obj.email)
+				print(send_list)
+			subject = 'Ride Share App Ride Confirmed'
+			message = f'Hi! Your ride to {ride.destination} has been confirmed by driver {ride.driver}.'
+			email_from = settings.EMAIL_HOST_USER
+			recipient_list = send_list
+			send_mail(subject, message, email_from, recipient_list)
+
+			# message = EmailMessage(
+			# 	to: [ride.owner.email,],
+            #     subject='Ride Share App Ride Confirmed',
+            #     body=f'Hi! Your ride to {ride.destination} has been confirmed by driver {ride.driver}.',
+            #     from_email=settings.EMAIL_HOST_USER,
+            #     cc=cc_list,
+            # )
+			# message.send(fail_silently=False)
+
 			messages.success(request, "Successfully confirmed ride request.")
 			return redirect("home")
 		form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)), initial={'driver': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).driver.__str__, 'owner': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).owner.__str__})
