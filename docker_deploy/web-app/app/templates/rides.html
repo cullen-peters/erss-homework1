@@ -2,6 +2,42 @@
 
 {% block content %}
     {% if user.is_authenticated %}
+    <h1>Your Confirmed Rides</h1>
+    <ul>
+      {%  for object in confirmed_rides  %}
+      <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
+      <ul>
+        <li>
+          {% if object.driver %}Driver: {{object.driver}}
+          <ul>
+            <li>
+              {% if object.driver.car_type == 1 %}Type of car: Sudan{% endif %}
+              {% if object.driver.car_type == 2 %}Type of car: Truck{% endif %}
+              {% if object.driver.car_type == 3 %}Type of car: Minivan{% endif %}
+              {% if object.driver.car_type == 4 %}Type of car: SUV{% endif %}
+              {% if object.driver.car_type == 5 %}Type of car: Camper{% endif %}
+            </li>
+            <li>
+              License Plate: {{object.driver.license_plate}}
+            </li>
+            <li>
+              Max Number of Passengers: {{object.driver.max_pass}}
+            </li>
+            {% if user.driver.special_info %}
+            <li>
+              Vehicle Special Information: {{ object.driver.special_info }}
+            </li>
+            {% endif %}
+          </ul>
+          {% endif %}
+        </li>
+        <li>Ride Destination: {{object.destination}}</li>
+        <li>Ride Arrival Date: {{object.arrival_date}}</li>
+        <li>Ride Arrival Time: {{object.arrival_time}}</li>
+        <li>Total Number of Passengers: {{object.passengers}}</li>
+      </ul>
+      {%  endfor  %}
+    </ul>
     <h1>Your Open Rides</h1>
     <ul>
         {%  for object in owned_rides  %}
@@ -95,42 +131,6 @@
                 <li>Your Number of Passengers: {{object.passengers}}</li>
             </ul>
             {%  endfor  %}
-    </ul>
-    <h1>Your Confirmed Rides</h1>
-    <ul>
-      {%  for object in confirmed_rides  %}
-      <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
-      <ul>
-        <li>
-          {% if object.driver %}Driver: {{object.driver}}
-          <ul>
-            <li>
-              {% if object.driver.car_type == 1 %}Type of car: Sudan{% endif %}
-              {% if object.driver.car_type == 2 %}Type of car: Truck{% endif %}
-              {% if object.driver.car_type == 3 %}Type of car: Minivan{% endif %}
-              {% if object.driver.car_type == 4 %}Type of car: SUV{% endif %}
-              {% if object.driver.car_type == 5 %}Type of car: Camper{% endif %}
-            </li>
-            <li>
-              License Plate: {{object.driver.license_plate}}
-            </li>
-            <li>
-              Max Number of Passengers: {{object.driver.max_pass}}
-            </li>
-            {% if user.driver.special_info %}
-            <li>
-              Vehicle Special Information: {{ object.driver.special_info }}
-            </li>
-            {% endif %}
-          </ul>
-          {% endif %}
-        </li>
-        <li>Ride Destination: {{object.destination}}</li>
-        <li>Ride Arrival Date: {{object.arrival_date}}</li>
-        <li>Ride Arrival Time: {{object.arrival_time}}</li>
-        <li>Total Number of Passengers: {{object.passengers}}</li>
-      </ul>
-      {%  endfor  %}
     </ul>
     <p class="text-center">Go <a href="{% url 'home' %}">Back</a> to the home menu.</p>
     {% else %}
