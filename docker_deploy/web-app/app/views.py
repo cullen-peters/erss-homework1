@@ -35,9 +35,9 @@ def login_request(request):
 	return render(request=request, template_name="registration/login.html", context={"login_form":form})
 
 def logout_request(request):
-        logout(request)
-        messages.info(request, "Logged out successfully!")
-        return redirect("/app/login")
+	logout(request)
+	messages.info(request, "Logged out successfully!")
+	return redirect("/app/login")
 
 # LOGIN^
 # -----------------------------------------------------------------------------------------------------
@@ -71,25 +71,29 @@ def update_user(request):
 # DRIVER
 
 def create_driver(request):
-	if request.method == "POST":
-		form = NewDriverForm(request.POST)
-		if form.is_valid():
-			driver = Driver(user=request.user, phone_num=form.cleaned_data.get("phone_num"), car_type=form.cleaned_data.get("car_type")
-				, license_plate=form.cleaned_data.get("license_plate"), max_pass=form.cleaned_data.get("max_pass"), special_info=form.cleaned_data.get("special_info"))
-			driver.save()
-			messages.success(request, "Successfully added as a driver." )
-			return redirect("home")
-		messages.error(request, "Unsuccessful registration. Invalid information.")
-	form = NewDriverForm()
-	return render (request=request, template_name="registration/register_driver.html", context={"register_driver_form":form})
+	if request.user.is_authenticated:
+		if request.method == "POST":
+			form = NewDriverForm(request.POST)
+			if form.is_valid():
+				driver = Driver(user=request.user, phone_num=form.cleaned_data.get("phone_num"), car_type=form.cleaned_data.get("car_type")
+					, license_plate=form.cleaned_data.get("license_plate"), max_pass=form.cleaned_data.get("max_pass"), special_info=form.cleaned_data.get("special_info"))
+				driver.save()
+				messages.success(request, "Successfully added as a driver." )
+				return redirect("home")
+			messages.error(request, "Unsuccessful registration. Invalid information.")
+		form = NewDriverForm()
+		return render (request=request, template_name="registration/register_driver.html", context={"register_driver_form":form})
+	return redirect("login")
 
 def delete_driver(request):
-	if request.method == "POST":
-		driver = Driver.objects.get(user=request.user)
-		driver.delete()
-		return redirect("home")
-	form = DeleteDriverForm()
-	return render (request=request, template_name="registration/unregister_driver.html", context={"delete_driver_form":form})
+	if request.user.is_authenticated:
+		if request.method == "POST":
+			driver = Driver.objects.get(user=request.user)
+			driver.delete()
+			return redirect("home")
+		form = DeleteDriverForm()
+		return render (request=request, template_name="registration/unregister_driver.html", context={"delete_driver_form":form})
+	return redirect("login")
 
 def update_driver(request):
 	if request.user.is_authenticated:
@@ -109,16 +113,18 @@ def update_driver(request):
 # RIDES
 
 def ride_request(request):
-	if request.method == "POST":
-		form = RideRequestForm(request.POST)
-		if form.is_valid():
+	if request.user.is_authenticated:
+		if request.method == "POST":
+			form = RideRequestForm(request.POST)
+			if form.is_valid():
 				ride = Ride(owner=request.user, destination=form.cleaned_data.get("destination"), arrival_date=form.cleaned_data.get("arrival_date"), arrival_time=form.cleaned_data.get("arrival_time"), passengers=form.cleaned_data.get("passengers"), car_type=form.cleaned_data.get("car type"), special_info=form.cleaned_data.get("special_info"), shared=form.cleaned_data.get("shared"), complete=False)
 				ride.save()
 				messages.success(request, "Successfully entered ride request.")
 				return redirect("home")
-		messages.error(request, "Unsuccessful ride request. Invalid information.")
-	form = RideRequestForm()
-	return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
+			messages.error(request, "Unsuccessful ride request. Invalid information.")
+		form = RideRequestForm()
+		return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
+	return redirect("login")
 
 def view_ride(request):
 	if request.user.is_authenticated:
