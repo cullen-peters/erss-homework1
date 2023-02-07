@@ -135,8 +135,8 @@ def view_ride(request):
 def view_ride_list(request):
         if request.user.is_authenticated:
                 owned_rides = Ride.objects.filter(owner=request.user, driver=None, complete=False)
-                shared_rides = Ride.objects.filter()
-                confirmed_rides = Ride.objects.filter()
+                shared_rides = Ride.objects.filter(driver=None, complete=False).exclude(owner=request.user)
+                confirmed_rides = Ride.objects.filter(complete=False).exclude(driver=None)
                 context = {
                         'owned_rides': owned_rides,
                         'shared_rides': shared_rides,
