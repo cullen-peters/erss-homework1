@@ -5,6 +5,7 @@ from django.dispatch import receiver
 
 
 CAR_TYPES = (
+        (0, 'No Preference'),
         (1, 'Sudan'),
         (2, 'Truck'),
         (3, 'Minivan'),

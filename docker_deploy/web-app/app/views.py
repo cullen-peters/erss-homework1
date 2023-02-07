@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm
-from .models import Driver, Ride
+from .models import Driver, Ride, CAR_TYPES
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponse
 
 
 def homepage(request):
@@ -100,6 +99,8 @@ def update_driver(request):
 				form.save()
 				return redirect("home")
 		form = UpdateDriverForm(instance=Driver.objects.get(user=request.user))
+		print(CAR_TYPES[Driver.objects.get(user=request.user).car_type - 1][1])
+		print(Driver.objects.get(user=request.user).car_type)
 		return render(request=request, template_name="registration/update_driver.html", context={"update_driver_form":form})
 	return redirect("login")
 
@@ -111,7 +112,6 @@ def ride_request(request):
 	if request.method == "POST":
 		form = RideRequestForm(request.POST)
 		if form.is_valid():
-				print("the form is valid")
 				ride = Ride(owner=request.user, destination=form.cleaned_data.get("destination"), arrival_date=form.cleaned_data.get("arrival_date"), arrival_time=form.cleaned_data.get("arrival_time"), passengers=form.cleaned_data.get("passengers"), car_type=form.cleaned_data.get("car type"), special_info=form.cleaned_data.get("special_info"), shared=form.cleaned_data.get("shared"), complete=False)
 				ride.save()
 				messages.success(request, "Successfully entered ride request.")
@@ -128,8 +128,7 @@ def view_ride(request):
 			ride.save()
 			messages.success(request, "Successfully entered ride request.")
 			return redirect("home")
-		# form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None))).to_representation(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
-		form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)))
+		form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)), initial={'driver': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).driver.__str__, 'owner': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).owner.__str__})
 		return render (request=request, template_name="ride_view.html", context={"ride_view_form":form})
 	return redirect("login")
 

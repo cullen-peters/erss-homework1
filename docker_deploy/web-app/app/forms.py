@@ -49,7 +49,7 @@ class UpdateUserForm(forms.ModelForm):
 
 class NewDriverForm(forms.ModelForm):
 	phone_num = forms.CharField(required=True)
-	car_type = forms.IntegerField(required=True)
+	car_type = forms.ChoiceField(choices=CAR_TYPES)
 	license_plate = forms.CharField(required=True)
 	max_pass = forms.CharField(required=True)
 
@@ -65,7 +65,7 @@ class NewDriverForm(forms.ModelForm):
 
 class UpdateDriverForm(forms.ModelForm):
 	phone_num = forms.CharField(required=True)
-	car_type = forms.IntegerField(required=True, max_value=5, min_value=1)
+	car_type = forms.ChoiceField(choices=CAR_TYPES)
 	license_plate = forms.CharField(required=True)
 	max_pass = forms.CharField(required=True)
 	class Meta:
@@ -109,13 +109,6 @@ class RideViewForm(forms.ModelForm):
 	class Meta:
 			model = Ride
 			fields = ("driver", "owner", "destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
-
-	# def to_representation(self, instance):
-	# 	if instance is not None and instance.driver is not None:
-	# 		instance['driver'] = instance.driver.user.get_full_name
-	# 	if instance is not None and instance.owner is not None:
-	# 		instance['owner'] = instance.owner.get_full_name
-	# 	return instance
 
 	def save(self, commit=True):
 		return
