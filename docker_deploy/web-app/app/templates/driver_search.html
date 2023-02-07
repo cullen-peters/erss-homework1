@@ -17,7 +17,7 @@
 <h1>Available Rides</h1>
 <ul>
   {%  for object in open_rides  %}
-  <li><a href="{% url 'ride' %}?{{object.pk}}">CONFIRM</a></li>
+  <li><a href="{% url 'confirm_ride' %}?{{object.pk}}">View More Details</a></li>
   <ul>
     <li>Ride Destination: {{object.destination}}</li>
     <li>Ride Arrival Date: {{object.arrival_date}}</li>

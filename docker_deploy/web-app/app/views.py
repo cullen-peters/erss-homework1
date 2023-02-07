@@ -163,6 +163,18 @@ def edit_ride(request):
                 return render(request=request, template_name="edit_ride.html", context={"edit_ride_form":form})
         return redirect("login")
 
+def confirm_ride(request):
+	if request.user.is_authenticated:
+		if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
+			ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
+			ride.driver = request.user.driver
+			ride.save()
+			messages.success(request, "Successfully confirmed ride request.")
+			return redirect("home")
+		form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)), initial={'driver': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).driver.__str__, 'owner': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).owner.__str__})
+		return render (request=request, template_name="confirm_ride.html", context={"ride_view_form":form})
+	return redirect("login")
+
 # RIDES ^
 # ---------------------------
 # SEARCH
