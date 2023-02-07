@@ -169,11 +169,14 @@ def edit_ride(request):
 
 def driver_search(request):
         if request.user.is_authenticated:
-                open_rides = Ride.objects.filter(driver=None, complete=False).exclude(owner=request.user)
+                #driver = Driver.objects.filter(user=request.user)
+                open_rides = Ride.objects.exclude(owner=request.user, complete=True).filter(driver=None)
                 if request.method == "POST":
                         form = DriverSearchForm(request.POST)
                         if form.is_valid():
-                                open_rides = Ride.objects.filter(driver=None, complete=False)
+                                dest = form.cleaned_data.get("destination")
+                                if dest:
+                                        open_rides = open_rides.filter(destination=dest)
                 else:
                         form = DriverSearchForm()
                 context = {
