@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 CAR_TYPES = (
         (0, 'No Preference'),
-        (1, 'Sudan'),
+        (1, 'Sedan'),
         (2, 'Truck'),
         (3, 'Minivan'),
         (4, 'SUV'),

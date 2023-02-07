@@ -115,18 +115,18 @@ def update_driver(request):
 # RIDES
 
 def ride_request(request):
-	if request.user.is_authenticated:
-		if request.method == "POST":
-			form = RideRequestForm(request.POST)
-			if form.is_valid():
-				ride = Ride(owner=request.user, destination=form.cleaned_data.get("destination"), arrival_date=form.cleaned_data.get("arrival_date"), arrival_time=form.cleaned_data.get("arrival_time"), passengers=form.cleaned_data.get("passengers"), car_type=form.cleaned_data.get("car type"), special_info=form.cleaned_data.get("special_info"), shared=form.cleaned_data.get("shared"), complete=False)
-				ride.save()
-				messages.success(request, "Successfully entered ride request.")
-				return redirect("home")
-			messages.error(request, "Unsuccessful ride request. Invalid information.")
-		form = RideRequestForm()
-		return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
-	return redirect("login")
+        if request.user.is_authenticated:
+                if request.method == "POST":
+                        form = RideRequestForm(request.POST)
+                        if form.is_valid():
+                                ride = Ride(owner=request.user, destination=form.cleaned_data.get("destination"), arrival_date=form.cleaned_data.get("arrival_date"), arrival_time=form.cleaned_data.get("arrival_time"), passengers=form.cleaned_data.get("passengers"), car_type=form.cleaned_data.get("car type"), special_info=form.cleaned_data.get("special_info"), shared=form.cleaned_data.get("shared"), complete=False)
+                                ride.save()
+                                messages.success(request, "Successfully entered ride request.")
+                                return redirect("ride_list")
+                        messages.error(request, "Unsuccessful ride request. Invalid information.")
+                form = RideRequestForm()
+                return render (request=request, template_name="ride_request.html", context={"ride_request_form":form})
+        return redirect("login")
 
 def view_ride(request):
 	if request.user.is_authenticated:
@@ -195,11 +195,28 @@ def confirm_ride(request):
 
 def driver_search(request):
         if request.user.is_authenticated:
-                open_rides = Ride.objects.filter(driver=None, complete=False).exclude(owner=request.user)
+                open_rides = Ride.objects.filter(complete=False).exclude(owner=request.user).exclude(driver__isnull=False)
+                open_rides = open_rides.filter(car_type=0) | open_rides.filter(car_type=request.user.driver.car_type)
+                open_rides = open_rides.filter(passengers__lte=request.user.driver.max_pass)
+                open_rides = open_rides.filter(special_info="") | open_rides.filter(special_info=None) | open_rides.filter(special_info=request.user.driver.special_info)
                 if request.method == "POST":
                         form = DriverSearchForm(request.POST)
                         if form.is_valid():
-                                open_rides = Ride.objects.filter(driver=None, complete=False)
+                                min_date = form.cleaned_data.get("min_date")
+                                min_time = form.cleaned_data.get("min_time")
+                                max_date = form.cleaned_data.get("max_date")
+                                max_time = form.cleaned_data.get("max_time")
+                                dest = form.cleaned_data.get("destination")
+                                if min_date:
+                                        open_rides = open_rides.filter(arrival_date__gte=min_date)
+                                if min_time:
+                                        open_rides = open_rides.filter(arrival_time__gte=min_time)
+                                if max_date:
+                                        open_rides = open_rides.filter(arrival_time__lte=max_date)
+                                if max_time:
+                                        open_rides = open_rides.filter(arrival_time__lte=max_time)
+                                if dest:
+                                        open_rides = open_rides.filter(destination=dest)
                 else:
                         form = DriverSearchForm()
                 context = {
