@@ -55,7 +55,7 @@
     <ul>
         {%  for object in shared_rides  %}
             <li><a href="{% url 'view_single_ride' %}?{{object.pk}}">VIEW</a></li>
-            <li><a href="{% url 'edit_ride' %}?{{object.pk}}">EDIT or LEAVE</a></li>
+            <li><a href="{% url 'edit_ride' %}?{{object.pk}}">EDIT</a></li>
             <ul>
                 <li>Ride Owner: {{object.owner}}</li>
                 <li>Ride Destination: {{object.destination}}</li>

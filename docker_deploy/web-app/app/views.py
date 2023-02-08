@@ -284,3 +284,31 @@ def join_ride(request):
 		return render (request=request, template_name="join_ride.html", context={"join_ride_form":form})
 	return redirect("login")
 
+# def leave_ride(request):
+# 	if request.user.is_authenticated:
+# 		if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
+# 			ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
+# 			print(ride)
+# 			form = RideLeaveForm(request.POST, instance=ride)
+# 			print(request.META)
+# 			if form.is_valid():
+# 				first, second = ride.sharers_num.split('\n')
+# 				new_txt = ''
+# 				for line in ride.sharers_num.split('\n'):
+# 					first, second = line.split('; ')
+# 					first1, first2 = first.split(': ')
+# 					second1, second2 = second.split(": ")
+# 					if User.objects.filter(username=first2).exists():
+# 						del_amt = int(second2)
+# 					else:
+# 						new_txt += f'{line}\n'
+# 				ride.sharers_num = new_txt
+# 				ride.passengers -= del_amt
+# 				# ride.sharers_num += f'Sharer: {request.user}; Added Passengers: {form.cleaned_data.get("your_additional_passengers") + 1}\n'
+# 				ride.sharers.remove(request.user)
+# 				ride.save()
+# 				return redirect("ride_list")
+# 		form = RideLeaveForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)), initial={'driver': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).driver.__str__, 'owner': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).owner.__str__})
+# 		return render (request=request, template_name="leave_ride.html", context={"ride_leave_form":form})
+# 	return redirect("login")
+

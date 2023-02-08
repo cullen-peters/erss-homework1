@@ -34,5 +34,6 @@ urlpatterns = [
     path("sharer_search", views.sharer_search, name="sharer_search"),
     path("join_ride", views.join_ride, name="join_ride"),
     path("view_single_ride", views.view_ride_without_complete, name="view_single_ride"),
+    # path("leave_ride", views.leave_ride, name="leave_ride"),
 ]
 

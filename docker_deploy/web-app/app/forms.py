@@ -197,4 +197,23 @@ class JoinRideForm(forms.ModelForm):
 	class Meta:
 		model = Ride
 		fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared", 'sharers_num')
+
+# class RideLeaveForm(forms.ModelForm):
+# 	driver = forms.CharField(disabled=True)
+# 	owner = forms.CharField(disabled=True)
+# 	destination = forms.CharField(disabled=True)
+# 	arrival_date = forms.DateField(disabled=True)
+# 	arrival_time = forms.TimeField(disabled=True)
+# 	passengers = forms.IntegerField(disabled=True, max_value=20, min_value=1)
+# 	car_type = forms.ChoiceField(choices=CAR_TYPES, disabled=True)
+# 	special_info = forms.CharField(disabled=True)
+# 	sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects)
+# 	shared = forms.BooleanField(disabled=True)
+# 	sharers_num = forms.CharField(widget=forms.Textarea, disabled=True)
+# 	class Meta:
+# 			model = Ride
+# 			fields = ("driver", "owner", "destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared", 'sharers', 'sharers_num')
+
+# 	def save(self, commit=True):
+# 		return
         
