@@ -25,11 +25,13 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ride_list' %}">Your Rides</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'sharer_search' %}">Share a Ride</a>
+        </li>
         {% if user.driver %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'driver_search' %}">Driver: Ride Search</a>
-        </li>
-        
+        </li>        
         <li class="nav-item">
           <a class="nav-link" href="{% url 'unregister_driver' %}">Driver Unregistation</a>
         </li>
