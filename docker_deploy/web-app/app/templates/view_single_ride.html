@@ -12,6 +12,7 @@
 		{% csrf_token %}
 		{{ ride_view_form|crispy }}                    
 	</form>
+    Possible sharers listed above. Sharers are highlighted.
 	<p class="text-center">Go <a href="{% url 'ride_list' %}">Back</a> to the ride list.</p>
     {% else %}
         <meta http-equiv="refresh" content="0; {% url 'login' %}" />
