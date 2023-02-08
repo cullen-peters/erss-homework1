@@ -12,6 +12,13 @@
 		<button class="btn btn-primary" type="submit">Register</button>
 	</form>
 	<p class="text-center">If you already have an account, <a href="{% url 'login' %}">login</a> instead.</p>
+	{% if messages %}
+    {% for message in messages %}
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        {{message}}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 </div>
 
 {% endblock %}
