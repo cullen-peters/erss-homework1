@@ -106,6 +106,7 @@ class RideViewForm(forms.ModelForm):
 	passengers = forms.IntegerField(disabled=True, max_value=20, min_value=1)
 	car_type = forms.ChoiceField(choices=CAR_TYPES, disabled=True)
 	special_info = forms.CharField(disabled=True)
+	# sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects.filter(sharers=self.sharers))
 	shared = forms.BooleanField(disabled=True)
 	class Meta:
 			model = Ride

@@ -44,40 +44,6 @@
             <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
             <li><a href="{% url 'edit_ride' %}?{{object.pk}}">EDIT</a></li>
                 <ul>
-                <li>
-                {% if object.driver %}Driver: {{object.driver}}
-                    <ul>
-                        <li>
-                            {% if object.driver.car_type == 1 %}
-                              Type of car: Sudan
-                            {% endif %}
-                            {% if object.driver.car_type == 2 %}
-                              Type of car: Truck
-                            {% endif %}
-                            {% if object.driver.car_type == 3 %}
-                              Type of car: Minivan
-                            {% endif %}
-                            {% if object.driver.car_type == 4 %}
-                              Type of car: SUV
-                            {% endif %}
-                            {% if object.driver.car_type == 5 %}
-                              Type of car: Camper
-                            {% endif %}
-                        </li>
-                        <li>
-                            License Plate: {{object.driver.license_plate}}
-                        </li>
-                        <li>
-                            Max Number of Passengers: {{object.driver.max_pass}}
-                        </li>
-                        {% if user.driver.special_info %}
-                            <li>
-                                Vehicle Special Information: {{ object.driver.special_info }}
-                            </li>
-                        {% endif %}
-                    </ul>
-                {% endif %}
-                </li>
                 <li>Ride Destination: {{object.destination}}</li>
                 <li>Ride Arrival Date: {{object.arrival_date}}</li>
                 <li>Ride Arrival Time: {{object.arrival_time}}</li>
@@ -89,42 +55,9 @@
     <ul>
         {%  for object in shared_rides  %}
             <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
-            <li><a href="{% url 'ride' %}?{{object.pk}}">LEAVE RIDE</a></li>
+            <li><a href="{% url 'edit_ride' %}?{{object.pk}}">EDIT or LEAVE</a></li>
             <ul>
-            <li>
-                {% if object.driver %}Driver: {{object.driver}}
-                    <ul>
-                        <li>
-                            {% if object.driver.car_type == 1 %}
-                              Type of car: Sudan
-                            {% endif %}
-                            {% if object.driver.car_type == 2 %}
-                              Type of car: Truck
-                            {% endif %}
-                            {% if object.driver.car_type == 3 %}
-                              Type of car: Minivan
-                            {% endif %}
-                            {% if object.driver.car_type == 4 %}
-                              Type of car: SUV
-                            {% endif %}
-                            {% if object.driver.car_type == 5 %}
-                              Type of car: Camper
-                            {% endif %}
-                        </li>
-                        <li>
-                            License Plate: {{object.driver.license_plate}}
-                        </li>
-                        <li>
-                            Max Number of Passengers: {{object.driver.max_pass}}
-                        </li>
-                        {% if user.driver.special_info %}
-                            <li>
-                                Vehicle Special Information: {{ object.driver.special_info }}
-                            </li>
-                        {% endif %}
-                    </ul>
-                {% endif %}
-                </li>
+                <li>Ride Owner: {{object.owner}}</li>
                 <li>Ride Destination: {{object.destination}}</li>
                 <li>Ride Arrival Date: {{object.arrival_date}}</li>
                 <li>Ride Arrival Time: {{object.arrival_time}}</li>
