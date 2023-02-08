@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Driver, Ride, CAR_TYPES
+from .models import Driver, Ride, CAR_TYPES, DRIVER_CAR_TYPES
 from tempus_dominus.widgets import DatePicker, TimePicker
 
 # Create your forms here.
@@ -48,14 +48,14 @@ class UpdateUserForm(forms.ModelForm):
 		return user
 
 class NewDriverForm(forms.ModelForm):
-	phone_num = forms.CharField(required=True)
-	car_type = forms.ChoiceField(choices=CAR_TYPES)
+	phone_number = forms.CharField(required=True)
+	car_type = forms.ChoiceField(choices=DRIVER_CAR_TYPES)
 	license_plate = forms.CharField(required=True)
-	max_pass = forms.CharField(required=True)
+	max_pass = forms.IntegerField(required=True, max_value=20, min_value=1)
 
 	class Meta:
 		model = Driver
-		fields = ("phone_num", "car_type", "license_plate", "max_pass", "special_info")
+		fields = ("phone_number", "car_type", "license_plate", "max_pass", "special_info")
 
 	def save(self, commit=True):
 		driver = super(NewDriverForm, self).save(commit=False)
@@ -64,13 +64,13 @@ class NewDriverForm(forms.ModelForm):
 		return driver
 
 class UpdateDriverForm(forms.ModelForm):
-	phone_num = forms.CharField(required=True)
-	car_type = forms.ChoiceField(choices=CAR_TYPES)
+	phone_number = forms.CharField(required=True)
+	car_type = forms.ChoiceField(choices=DRIVER_CAR_TYPES)
 	license_plate = forms.CharField(required=True)
 	max_pass = forms.CharField(required=True)
 	class Meta:
 		model = Driver
-		fields = ("phone_num", "car_type", "license_plate", "max_pass", "special_info")
+		fields = ("phone_number", "car_type", "license_plate", "max_pass", "special_info")
 
 	def save(self, commit=True):
 		driver = super(UpdateDriverForm, self).save(commit=False)
@@ -79,23 +79,23 @@ class UpdateDriverForm(forms.ModelForm):
 		return driver
 
 class RideRequestForm(forms.ModelForm):
-        destination = forms.CharField(required=True)
-        arrival_date = forms.DateField(widget=forms.DateInput(
-        format=('%Y-%m-%d'),
-        attrs={'class': 'form-control', 
-               'placeholder': 'Select a date',
-               'type': 'date'
-              }))
-        arrival_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
-        passengers = forms.IntegerField(required=True, max_value=20, min_value=1)
-        car_type = forms.ChoiceField(choices=CAR_TYPES, required=False)
-        special_info = forms.CharField(required=False)
-        shared = forms.BooleanField(required=False)
-        class Meta:
-                model = Ride
-                fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
-        def save(self, commit=True):
-                return
+	destination = forms.CharField(required=True)
+	arrival_date = forms.DateField(widget=forms.DateInput(
+	format=('%Y-%m-%d'),
+	attrs={'class': 'form-control', 
+			'placeholder': 'Select a date',
+			'type': 'date'
+			}))
+	arrival_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+	passengers = forms.IntegerField(required=True, max_value=20, min_value=1)
+	car_type = forms.ChoiceField(choices=CAR_TYPES, required=False)
+	special_info = forms.CharField(required=False)
+	shared = forms.BooleanField(required=False)
+	class Meta:
+			model = Ride
+			fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
+	def save(self, commit=True):
+			return
 
 class RideViewForm(forms.ModelForm):
 	driver = forms.CharField(disabled=True)
@@ -106,11 +106,11 @@ class RideViewForm(forms.ModelForm):
 	passengers = forms.IntegerField(disabled=True, max_value=20, min_value=1)
 	car_type = forms.ChoiceField(choices=CAR_TYPES, disabled=True)
 	special_info = forms.CharField(disabled=True)
-	# sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects.filter(sharers=self.sharers))
+	sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects)
 	shared = forms.BooleanField(disabled=True)
 	class Meta:
 			model = Ride
-			fields = ("driver", "owner", "destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
+			fields = ("driver", "owner", "destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared", 'sharers')
 
 	def save(self, commit=True):
 		return
@@ -142,7 +142,7 @@ class EditRideForm(forms.ModelForm):
 class DeleteDriverForm(forms.Form):
 	class Meta:
 		model = Driver
-		fields = ("phone_num", "car_type", "license_plate", "max_pass", "special_info")
+		fields = ("phone_number", "car_type", "license_plate", "max_pass", "special_info")
 
 class DriverSearchForm(forms.Form):
         min_date = forms.DateField(widget=forms.DateInput(
