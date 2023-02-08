@@ -31,5 +31,6 @@ urlpatterns = [
     path("edit_ride", views.edit_ride, name='edit_ride'),
     path("driver_search", views.driver_search, name='driver_search'),
     path("confirm_ride", views.confirm_ride, name="confirm_ride"),
+    path("view_single_ride", views.view_ride_without_complete, name="view_single_ride"),
 ]
 
