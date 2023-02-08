@@ -110,35 +110,37 @@ class RideViewForm(forms.ModelForm):
 	special_info = forms.CharField(disabled=True)
 	sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects)
 	shared = forms.BooleanField(disabled=True)
+	sharers_num = forms.CharField(widget=forms.Textarea, disabled=True)
 	class Meta:
 			model = Ride
-			fields = ("driver", "owner", "destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared", 'sharers')
+			fields = ("driver", "owner", "destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared", 'sharers', 'sharers_num')
 
 	def save(self, commit=True):
 		return
 
 class EditRideForm(forms.ModelForm):
-        destination = forms.CharField(required=True)
-        arrival_date = forms.DateField(widget=forms.DateInput(
-                format=('%Y-%m-%d'),
-                attrs={'class': 'form-control',
-                       'placeholder': 'Select a date',
-                       'type': 'date'
-                       }))
-        arrival_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
-        passengers = forms.IntegerField(required=True, max_value=20, min_value=1)
-        car_type = forms.ChoiceField(choices=CAR_TYPES, required=False)
-        special_info = forms.CharField(required=False)
-        shared = forms.BooleanField(required=False)
-        class Meta:
-                model = Ride
-                fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
+	destination = forms.CharField(required=True)
+	arrival_date = forms.DateField(widget=forms.DateInput(
+			format=('%Y-%m-%d'),
+			attrs={'class': 'form-control',
+					'placeholder': 'Select a date',
+					'type': 'date'
+					}))
+	arrival_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+	passengers = forms.IntegerField(required=True, max_value=20, min_value=1)
+	car_type = forms.ChoiceField(choices=CAR_TYPES, required=False)
+	special_info = forms.CharField(required=False)
+	shared = forms.BooleanField(required=False)
+	sharers_num = forms.CharField(widget=forms.Textarea, disabled=True)
+	class Meta:
+		model = Ride
+		fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared", "sharers_num")
 
-        def save(self, commit=True):
-                ride = super(EditRideForm, self).save(commit=False)
-                if commit:
-                        ride.save()
-                return ride
+	def save(self, commit=True):
+		ride = super(EditRideForm, self).save(commit=False)
+		if commit:
+				ride.save()
+		return ride
                 
         
 class DeleteDriverForm(forms.Form):
@@ -181,17 +183,18 @@ class SharerSearchForm(forms.Form):
         destination = forms.CharField(required=True)
 
 class JoinRideForm(forms.ModelForm):
-        destination = forms.CharField(disabled=True)
-        arrival_date = forms.DateField(disabled=True)
-        arrival_time = forms.TimeField(disabled=True)
-        passengers = forms.IntegerField(disabled=True, max_value=20, min_value=1)
-        car_type = forms.ChoiceField(choices=CAR_TYPES, disabled=True)
-        special_info = forms.CharField(disabled=True, required=False)
-        sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects,required=False)
-        shared = forms.BooleanField(disabled=True)
-        your_additional_passengers = forms.IntegerField(required=True, max_value=20, min_value=0)
+	destination = forms.CharField(disabled=True)
+	arrival_date = forms.DateField(disabled=True)
+	arrival_time = forms.TimeField(disabled=True)
+	passengers = forms.IntegerField(disabled=True, max_value=20, min_value=1)
+	car_type = forms.ChoiceField(choices=CAR_TYPES, disabled=True)
+	special_info = forms.CharField(disabled=True, required=False)
+	sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects,required=False)
+	shared = forms.BooleanField(disabled=True)
+	your_additional_passengers = forms.IntegerField(required=True, max_value=20, min_value=0)
+	sharers_num = forms.CharField(widget=forms.Textarea, disabled=True, required=False)
 
-        class Meta:
-                model = Ride
-                fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
+	class Meta:
+		model = Ride
+		fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared", 'sharers_num')
         

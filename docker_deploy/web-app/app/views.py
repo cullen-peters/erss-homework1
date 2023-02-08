@@ -269,17 +269,18 @@ def sharer_search(request):
         return redirect("login")
 
 def join_ride(request):
-        if request.user.is_authenticated:
-                if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
-                        ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
-                        form = JoinRideForm(request.POST,instance=ride)
-                        if form.is_valid():
-                                ride.passengers += form.cleaned_data.get("your_additional_passengers") + 1
-                                ride.sharers.add(request.user)
-                                ride.save()
-                                messages.success(request, "Successfully joined ride.")
-                                return redirect("ride_list")
-                form = JoinRideForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)), initial={'driver': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).driver.__str__, 'owner': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).owner.__str__})
-                return render (request=request, template_name="join_ride.html", context={"join_ride_form":form})
-        return redirect("login")
+	if request.user.is_authenticated:
+		if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
+			ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
+			form = JoinRideForm(request.POST, instance=ride)
+			if form.is_valid():
+				ride.passengers += form.cleaned_data.get("your_additional_passengers") + 1
+				ride.sharers_num += f'Sharer: {request.user}; Added Passengers: {form.cleaned_data.get("your_additional_passengers") + 1}\n'
+				ride.sharers.add(request.user)
+				ride.save()
+				messages.success(request, "Successfully joined ride.")
+				return redirect("ride_list")
+		form = JoinRideForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)), initial={'driver': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).driver.__str__, 'owner': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).owner.__str__})
+		return render (request=request, template_name="join_ride.html", context={"join_ride_form":form})
+	return redirect("login")
 
