@@ -1,0 +1,17 @@
+Danger Log:
+
+- Security:
+  - The vcm pages are public to the internet so anyone with the name can attempt to connect
+
+- Inconsistency in Requirements:
+  - Using passengers to search for shared rides to join does not make sense because there is not a maximum until the ride is confirmed by the driver, and then it is too late to join
+  - It is not clear whether ride sharers should be able to edit the ride (destination, time, etc.) or not
+
+- Testing: it is difficult to fully test the site, especially since real users might use the site in unexpected or malicious ways that we would not be able to prepare for
+
+- Leaving Shared Ride:
+   - This was unable to be finished as an implementation, so a sharer cannot leave a ride.
+   - This also means that the passenger number will not update if a sharer does not show up
+
+- Sharers field
+   - There is a security issue with the sharers field that any user can see all of the other user's usernames on the site. This is a major security concern, but was not able to be fixed in time.
