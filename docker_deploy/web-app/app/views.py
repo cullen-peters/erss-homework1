@@ -233,7 +233,7 @@ def driver_search(request):
 
 def sharer_search(request):
         if request.user.is_authenticated:
-                open_rides = Ride.objects.filter(complete=False, shared=True).exclude(owner=request.user).exclude(driver__isnull=False)
+                open_rides = Ride.objects.filter(complete=False, shared=True).exclude(owner=request.user).exclude(driver__isnull=False).exclude(sharers__in=request.user)
                 if request.method == "POST":
                         form = SharerSearchForm(request.POST)
                         if form.is_valid():
