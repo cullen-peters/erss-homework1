@@ -43,3 +43,4 @@ class Ride(models.Model):
     special_info = models.TextField(null=True, blank=True)
     shared = models.BooleanField(default=False)
     complete = models.BooleanField()
+    sharers_num = models.TextField(null=True, blank=True)

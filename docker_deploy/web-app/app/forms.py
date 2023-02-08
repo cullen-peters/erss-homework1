@@ -181,24 +181,17 @@ class SharerSearchForm(forms.Form):
         destination = forms.CharField(required=True)
 
 class JoinRideForm(forms.ModelForm):
-        owner = forms.CharField(disabled=True)
         destination = forms.CharField(disabled=True)
         arrival_date = forms.DateField(disabled=True)
         arrival_time = forms.TimeField(disabled=True)
         passengers = forms.IntegerField(disabled=True, max_value=20, min_value=1)
         car_type = forms.ChoiceField(choices=CAR_TYPES, disabled=True)
-        special_info = forms.CharField(disabled=True)
-        sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects)
+        special_info = forms.CharField(disabled=True, required=False)
+        sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects,required=False)
         shared = forms.BooleanField(disabled=True)
         your_additional_passengers = forms.IntegerField(required=True, max_value=20, min_value=0)
 
         class Meta:
                 model = Ride
                 fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
-
-#        def save(self, commit=True):
-#                ride = super(EditRideForm, self).save(commit=False)
-#                if commit:
-#                        ride.save()
-#                return ride
         

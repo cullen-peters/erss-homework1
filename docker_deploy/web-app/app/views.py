@@ -272,10 +272,9 @@ def join_ride(request):
         if request.user.is_authenticated:
                 if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
                         ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
-                        form = JoinRideForm(request.POST)
+                        form = JoinRideForm(request.POST,instance=ride)
                         if form.is_valid():
-                                print("is valid")
-                                ride.passengers += form.cleaned_data.get("your_passengers")
+                                ride.passengers += form.cleaned_data.get("your_additional_passengers") + 1
                                 ride.sharers.add(request.user)
                                 ride.save()
                                 messages.success(request, "Successfully joined ride.")
