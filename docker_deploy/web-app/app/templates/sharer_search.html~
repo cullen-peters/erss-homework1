@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 
 {% if user.is_authenticated %}
-<h1>Driver: Search For Open Rides</h1>
+<h1>Search For Open Rides</h1>
 <div class="container py-5">
   <form method="POST">
     {% csrf_token %}
@@ -17,7 +17,7 @@
 <h1>Results</h1>
 <ul>
   {%  for object in open_rides  %}
-  <li><a href="{% url 'confirm_ride' %}?{{object.pk}}">View More Details and Confirm</a></li>
+  <li><a href="{% url 'confirm_ride' %}?{{object.pk}}">View More Details</a></li>
   <ul>
     <li>Ride Destination: {{object.destination}}</li>
     <li>Ride Arrival Date: {{object.arrival_date}}</li>

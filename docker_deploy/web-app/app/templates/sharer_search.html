@@ -4,11 +4,11 @@
 {% load crispy_forms_tags %}
 
 {% if user.is_authenticated %}
-<h1>Driver: Search For Open Rides</h1>
+<h1>Sharer: Search For Open Rides</h1>
 <div class="container py-5">
   <form method="POST">
     {% csrf_token %}
-    {{ driver_search_form|crispy }}
+    {{ sharer_search_form|crispy }}
     <button class="btn btn-primary" type="submit">Search!</button>
   </form>
 </div>
@@ -17,8 +17,9 @@
 <h1>Results</h1>
 <ul>
   {%  for object in open_rides  %}
-  <li><a href="{% url 'confirm_ride' %}?{{object.pk}}">View More Details and Confirm</a></li>
+  <li><a href="{% url 'join_ride' %}?{{object.pk}}">View More Details and Join</a></li>
   <ul>
+    <li>Ride Owner: {{object.owner}}</li>
     <li>Ride Destination: {{object.destination}}</li>
     <li>Ride Arrival Date: {{object.arrival_date}}</li>
     <li>Ride Arrival Time: {{object.arrival_time}}</li>

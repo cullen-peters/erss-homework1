@@ -29,8 +29,10 @@ urlpatterns = [
     path("ride", views.view_ride, name="ride"),
     path("rides", views.view_ride_list, name='ride_list'),
     path("edit_ride", views.edit_ride, name='edit_ride'),
-    path("driver_search", views.driver_search, name='driver_search'),
+    path("driver_search", views.driver_search, name="driver_search"),
     path("confirm_ride", views.confirm_ride, name="confirm_ride"),
+    path("sharer_search", views.sharer_search, name="sharer_search"),
+    path("join_ride", views.join_ride, name="join_ride"),
     path("view_single_ride", views.view_ride_without_complete, name="view_single_ride"),
 ]
 
