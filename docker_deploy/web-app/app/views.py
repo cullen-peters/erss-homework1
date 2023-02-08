@@ -142,6 +142,12 @@ def view_ride(request):
 		return render (request=request, template_name="ride_view.html", context={"ride_view_form":form})
 	return redirect("login")
 
+def view_ride_without_complete(request):
+	if request.user.is_authenticated:
+		form = RideViewForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)), initial={'driver': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).driver.__str__, 'owner': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).owner.__str__})
+		return render (request=request, template_name="view_single_ride.html", context={"ride_view_form":form})
+	return redirect("login")
+
 def view_ride_list(request):
 	if request.user.is_authenticated:
 		owned_rides = Ride.objects.filter(owner=request.user, driver=None, complete=False)

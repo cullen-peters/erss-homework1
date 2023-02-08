@@ -5,7 +5,7 @@
     <h1>Your Confirmed Rides</h1>
     <ul>
       {%  for object in confirmed_rides  %}
-      <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
+      <li><a href="{% url 'view_single_ride' %}?{{object.pk}}">VIEW</a></li>
       <ul>
         <li>
           {% if object.driver %}Driver: {{object.driver}}
@@ -41,7 +41,7 @@
     <h1>Your Open Rides</h1>
     <ul>
         {%  for object in owned_rides  %}
-            <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
+            <li><a href="{% url 'view_single_ride' %}?{{object.pk}}">VIEW</a></li>
             <li><a href="{% url 'edit_ride' %}?{{object.pk}}">EDIT</a></li>
                 <ul>
                 <li>Ride Destination: {{object.destination}}</li>
@@ -54,7 +54,7 @@
     <h1>Your Joined Rides</h1>
     <ul>
         {%  for object in shared_rides  %}
-            <li><a href="{% url 'ride' %}?{{object.pk}}">VIEW</a></li>
+            <li><a href="{% url 'view_single_ride' %}?{{object.pk}}">VIEW</a></li>
             <li><a href="{% url 'edit_ride' %}?{{object.pk}}">EDIT or LEAVE</a></li>
             <ul>
                 <li>Ride Owner: {{object.owner}}</li>
