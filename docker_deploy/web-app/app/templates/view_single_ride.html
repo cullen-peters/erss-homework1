@@ -7,11 +7,12 @@
 <div class="container py-5">
     {% if user.is_authenticated %}
 	<h1>Ride</h1>
+    <h6>Ride not confirmed if Driver is None</h6>
 	<form method="POST">
 		{% csrf_token %}
 		{{ ride_view_form|crispy }}                    
 	</form>
-	<p class="text-center">Go <a href="{% url 'home' %}">Back</a> to the home menu.</p>
+	<p class="text-center">Go <a href="{% url 'ride_list' %}">Back</a> to the ride list.</p>
     {% else %}
         <meta http-equiv="refresh" content="0; {% url 'login' %}" />
     {% endif %}

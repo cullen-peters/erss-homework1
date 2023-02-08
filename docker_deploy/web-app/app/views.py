@@ -203,18 +203,10 @@ def confirm_ride(request):
 
 def driver_search(request):
 	if request.user.is_authenticated:
-		print(Ride.objects.all())
 		open_rides = Ride.objects.filter(complete=False).exclude(owner=request.user).exclude(driver__isnull=False)
-		print(open_rides)
-		for obj in open_rides.all():
-			print(f'{obj} + {obj.car_type}')
-		print(request.user.driver.car_type)
 		open_rides = open_rides.filter(car_type=0) | open_rides.filter(car_type=request.user.driver.car_type)
-		print(open_rides)
 		open_rides = open_rides.filter(passengers__lte=request.user.driver.max_pass)
-		print(open_rides)
 		open_rides = open_rides.filter(special_info="") | open_rides.filter(special_info=None) | open_rides.filter(special_info=request.user.driver.special_info)
-		print(open_rides)
 		if request.method == "POST":
 			form = DriverSearchForm(request.POST)
 			if form.is_valid():
@@ -238,12 +230,12 @@ def driver_search(request):
 					open_rides = open_rides.filter(arrival_time__lte=max_time)
 				if dest:
 					open_rides = open_rides.filter(destination=dest)
-			else:
-				form = DriverSearchForm()
-			context = {
-				'driver_search_form': form,
-				'open_rides': open_rides,
-			}
+		else:
+			form = DriverSearchForm()
+		context = {
+			'driver_search_form': form,
+			'open_rides': open_rides,
+		}
 		return render(request=request, template_name="driver_search.html", context=context)
 	return redirect("login")
 

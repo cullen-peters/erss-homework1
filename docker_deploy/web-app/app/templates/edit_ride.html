@@ -12,10 +12,9 @@
     {{ edit_ride_form|crispy }}
     <button class="btn btn-primary" type="submit">Edit!</button>
   </form>
-  <p class="text-center">Go <a href="{% url 'home' %}">Back</a> to the home menu.</p>
+  <p class="text-center">Go <a href="{% url 'ride_list' %}">Back</a> to the ride list.</p>
   {% else %}
   <meta http-equiv="refresh" content="0; {% url 'login' %}" />
   {% endif %}
 </div>
-
 {% endblock %}
