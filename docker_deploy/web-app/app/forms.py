@@ -177,4 +177,28 @@ class SharerSearchForm(forms.Form):
                        }), required=False)
         max_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=False)
         destination = forms.CharField(required=True)
-        num_pass = forms.IntegerField(required=True, max_value=20, min_value=1)
+
+class JoinRideForm(forms.ModelForm):
+        driver = forms.CharField(disabled=True)
+	owner = forms.CharField(disabled=True)
+	destination = forms.CharField(disabled=True)
+	arrival_date = forms.DateField(disabled=True)
+	arrival_time = forms.TimeField(disabled=True)
+	passengers = forms.IntegerField(disabled=True, max_value=20, min_value=1)
+	car_type = forms.ChoiceField(choices=CAR_TYPES, disabled=True)
+	special_info = forms.CharField(disabled=True)
+	sharers = forms.ModelMultipleChoiceField(disabled=True, queryset=User.objects)
+	shared = forms.BooleanField(disabled=True)
+
+        your_passengers = forms.IntegerField(required=True, max_value=20, min_value=1)
+
+	class Meta:
+                model = Ride
+                fields = ("destination", "arrival_date", "arrival_time", "passengers", "car_type", "special_info", "shared")
+
+        def save(self, commit=True):
+                ride = super(EditRideForm, self).save(commit=False)
+                if commit:
+                        ride.save()
+                return ride
+        

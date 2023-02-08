@@ -243,7 +243,7 @@ def driver_search(request):
 
 def sharer_search(request):
         if request.user.is_authenticated:
-                open_rides = Ride.objects.filter(complete=False, shared=True).exclude(owner=request.user).exclude(driver__isnull=False).exclude(sharers__in=request.user)
+                open_rides = Ride.objects.filter(complete=False, shared=True).exclude(owner=request.user).exclude(driver__isnull=False).exclude(sharers=request.user)
                 if request.method == "POST":
                         form = SharerSearchForm(request.POST)
                         if form.is_valid():
@@ -267,5 +267,17 @@ def sharer_search(request):
                         'sharer_search_form': form,
                         'open_rides': open_rides,
                         }
-                return render(request=request, template_name="driver_search.html", context=context)
+                return render(request=request, template_name="sharer_search.html", context=context)
+        return redirect("login")
+
+def join_ride(request):
+        if request.user.is_authenticated:
+                if request.method == "POST":
+                        form = JoinRideForm(request.POST)
+                        if form.is_valid():
+                                form.save()
+                                return redirect("sharer_search")
+                else:
+                        form = JoinRideForm()
+                return render(request=request, template_name="sharer_search.html", context={'join_form':form})
         return redirect("login")
