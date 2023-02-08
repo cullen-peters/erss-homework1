@@ -48,10 +48,11 @@ class UpdateUserForm(forms.ModelForm):
 		return user
 
 class NewDriverForm(forms.ModelForm):
-	phone_number = forms.CharField(required=True)
+	phone_number = forms.CharField(required=True, max_length=16)
 	car_type = forms.ChoiceField(choices=DRIVER_CAR_TYPES)
-	license_plate = forms.CharField(required=True)
+	license_plate = forms.CharField(required=True, max_length=10)
 	max_pass = forms.IntegerField(required=True, max_value=20, min_value=1)
+	special_info = forms.CharField(max_length=100, required=False)
 
 	class Meta:
 		model = Driver
@@ -64,10 +65,11 @@ class NewDriverForm(forms.ModelForm):
 		return driver
 
 class UpdateDriverForm(forms.ModelForm):
-	phone_number = forms.CharField(required=True)
+	phone_number = forms.CharField(required=True, max_length=16)
 	car_type = forms.ChoiceField(choices=DRIVER_CAR_TYPES)
-	license_plate = forms.CharField(required=True)
+	license_plate = forms.CharField(required=True, max_length=10)
 	max_pass = forms.CharField(required=True)
+	special_info = forms.CharField(max_length=100, required=False)
 	class Meta:
 		model = Driver
 		fields = ("phone_number", "car_type", "license_plate", "max_pass", "special_info")
