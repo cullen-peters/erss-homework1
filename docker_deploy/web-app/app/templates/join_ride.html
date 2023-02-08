@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<div class="container py-5">
+  {% if user.is_authenticated %}
+  <h1>Join This Ride</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ join_ride_form|crispy }}
+    <button class="btn btn-primary" type="submit">Join!</button>
+  </form>
+  <p class="text-center">Go <a href="{% url 'sharer_search' %}">Back</a> to the ride search.</p>
+  {% else %}
+  <meta http-equiv="refresh" content="0; {% url 'login' %}" />
+  {% endif %}
+</div>
+{% endblock %}

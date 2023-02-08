@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm, EditRideForm, DriverSearchForm, SharerSearchForm
+from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm, EditRideForm, DriverSearchForm, SharerSearchForm, JoinRideForm
 from .models import Driver, Ride, CAR_TYPES, DRIVER_CAR_TYPES
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -270,12 +270,17 @@ def sharer_search(request):
 
 def join_ride(request):
         if request.user.is_authenticated:
-                if request.method == "POST":
+                if request.method == "POST" and request.META.get('QUERY_STRING', None) is not None:
+                        ride = Ride.objects.get(pk=request.META.get('QUERY_STRING', None))
                         form = JoinRideForm(request.POST)
                         if form.is_valid():
-                                form.save()
-                                return redirect("sharer_search")
-                else:
-                        form = JoinRideForm()
-                return render(request=request, template_name="sharer_search.html", context={'join_form':form})
+                                print("is valid")
+                                ride.passengers += form.cleaned_data.get("your_passengers")
+                                ride.sharers.add(request.user)
+                                ride.save()
+                                messages.success(request, "Successfully joined ride.")
+                                return redirect("ride_list")
+                form = JoinRideForm(instance=Ride.objects.get(pk=request.META.get('QUERY_STRING', None)), initial={'driver': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).driver.__str__, 'owner': Ride.objects.get(pk=request.META.get('QUERY_STRING', None)).owner.__str__})
+                return render (request=request, template_name="join_ride.html", context={"join_ride_form":form})
         return redirect("login")
+
