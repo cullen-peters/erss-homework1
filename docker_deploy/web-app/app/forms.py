@@ -160,3 +160,21 @@ class DriverSearchForm(forms.Form):
                        }), required=False)
         max_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=False)
         destination = forms.CharField(required=False)
+
+class SharerSearchForm(forms.Form):
+        min_date = forms.DateField(widget=forms.DateInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select a date',
+                       'type': 'date',
+                       }), required=False)
+        min_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}),required=False)
+        max_date = forms.DateField(widget=forms.DateInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select a date',
+                       'type': 'date',
+                       }), required=False)
+        max_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=False)
+        destination = forms.CharField(required=True)
+        num_pass = forms.IntegerField(required=True, max_value=20, min_value=1)

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm, EditRideForm, DriverSearchForm
+from .forms import NewUserForm, NewDriverForm, DeleteDriverForm, RideRequestForm, UpdateUserForm, UpdateDriverForm, RideViewForm, EditRideForm, DriverSearchForm, SharerSearchForm
 from .models import Driver, Ride, CAR_TYPES
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -208,11 +208,16 @@ def driver_search(request):
                                 max_time = form.cleaned_data.get("max_time")
                                 dest = form.cleaned_data.get("destination")
                                 if min_date:
+                                        print(min_date)
+                                        print(type(min_date))
                                         open_rides = open_rides.filter(arrival_date__gte=min_date)
                                 if min_time:
+                                        print(min_time)
                                         open_rides = open_rides.filter(arrival_time__gte=min_time)
                                 if max_date:
-                                        open_rides = open_rides.filter(arrival_time__lte=max_date)
+                                        print(max_date)
+                                        print(type(max_date))
+                                        open_rides = open_rides.filter(arrival_date__lte=max_date)
                                 if max_time:
                                         open_rides = open_rides.filter(arrival_time__lte=max_time)
                                 if dest:
@@ -226,3 +231,31 @@ def driver_search(request):
                 return render(request=request, template_name="driver_search.html", context=context)
         return redirect("login")
 
+def sharer_search(request):
+        if request.user.is_authenticated:
+                open_rides = Ride.objects.filter(complete=False, shared=True).exclude(owner=request.user).exclude(driver__isnull=False)
+                if request.method == "POST":
+                        form = SharerSearchForm(request.POST)
+                        if form.is_valid():
+                                min_date = form.cleaned_data.get("min_date")
+                                min_time = form.cleaned_data.get("min_time")
+                                max_date = form.cleaned_data.get("max_date")
+                                max_time = form.cleaned_data.get("max_time")
+                                dest = form.cleaned_data.get("destination")
+                                num_pass = form.cleaned_data.get("num_pass")
+                                if min_date:
+                                        open_rides = open_rides.filter(arrival_date__gte=min_date)
+                                if min_time:
+                                        open_rides = open_rides.filter(arrival_time__gte=min_time)
+                                if max_date:
+                                        open_rides = open_rides.filter(arrival_date__lte=max_date)
+                                if dest:
+                                        open_rides = open_rides.filter(destination=dest)
+                else:
+                        form = SharerSearchForm()
+                context = {
+                        'sharer_search_form': form,
+                        'open_rides': open_rides,
+                        }
+                return render(request=request, template_name="driver_search.html", context=context)
+        return redirect("login")
