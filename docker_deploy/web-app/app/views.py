@@ -48,7 +48,7 @@ def logout_request(request):
 def register(request):
 	if request.method == "POST":
 		form = NewUserForm(request.POST)
-		if form.is_valid() and User.objects.get(email=form.cleaned_data.get('email')) is None:
+		if form.is_valid() and not User.objects.filter(email=form.cleaned_data.get('email')).exists():
 			user = form.save()
 			login(request, user)
 			messages.success(request, "Registration successful." )
